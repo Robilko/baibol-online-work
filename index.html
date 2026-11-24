@@ -1,0 +1,1588 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Локаторы Байбола для Appium</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Onest:wght@400;500;600;700&family=Unbounded:wght@600&display=swap">
+<style>
+  :root {
+    --bg: #F3F5F4;
+    --surface: #FFFFFF;
+    --ink: #172023;
+    --muted: #56646A;
+    --line: #D6DDDC;
+    --accent: #0E6470;
+    --mark-bg: #FFF0B3;
+    --mark-ink: #4A3A00;
+    --android: #2B7549;
+    --android-bg: #E3F1E8;
+    --ios: #3553A6;
+    --ios-bg: #E6EBF8;
+    --warn: #8A4B00;
+    --warn-bg: #FFF1D6;
+    --ok: #2B7549;
+    --ok-bg: #E3F1E8;
+    --code-bg: #EAEFEE;
+    --radius: 10px;
+    --font-body: "Onest", "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-display: "Unbounded", "Onest", "Segoe UI", system-ui, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --bg: #0F1516;
+      --surface: #162022;
+      --ink: #E3EAEA;
+      --muted: #9AA8AB;
+      --line: #28363A;
+      --accent: #5DC2CF;
+      --mark-bg: #4A3E10;
+      --mark-ink: #FFE38A;
+      --android: #7ED3A1;
+      --android-bg: #16322A;
+      --ios: #A2B4FF;
+      --ios-bg: #1C2545;
+      --warn: #FFC66E;
+      --warn-bg: #3A2A0F;
+      --ok: #7ED3A1;
+      --ok-bg: #16322A;
+      --code-bg: #1B2729;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #0F1516;
+    --surface: #162022;
+    --ink: #E3EAEA;
+    --muted: #9AA8AB;
+    --line: #28363A;
+    --accent: #5DC2CF;
+    --mark-bg: #4A3E10;
+    --mark-ink: #FFE38A;
+    --android: #7ED3A1;
+    --android-bg: #16322A;
+    --ios: #A2B4FF;
+    --ios-bg: #1C2545;
+    --warn: #FFC66E;
+    --warn-bg: #3A2A0F;
+    --ok: #7ED3A1;
+    --ok-bg: #16322A;
+    --code-bg: #1B2729;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  .page {
+    max-width: 880px;
+    margin: 0 auto;
+    padding-inline: 20px;
+    padding-block: 40px 72px;
+    display: flex;
+    flex-direction: column;
+    gap: 56px;
+  }
+  a { color: var(--accent); }
+  a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+
+  header { display: flex; flex-direction: column; gap: 14px; }
+  .eyebrow {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  h1 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(28px, 5vw, 40px);
+    line-height: 1.15;
+    margin: 0;
+    text-wrap: balance;
+  }
+  .lead { font-size: 18px; margin: 0; max-width: 62ch; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .chip.warn { background: var(--warn-bg); border-color: transparent; color: var(--warn); }
+  .chip.next { background: var(--mark-bg); border-color: transparent; color: var(--mark-ink); }
+  .chip.ok { background: var(--ok-bg); border-color: transparent; color: var(--ok); }
+  nav.toc { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 14px; padding-top: 6px; }
+  nav.toc a { text-decoration: none; border-bottom: 1px solid transparent; }
+  nav.toc a:hover { border-bottom-color: currentColor; }
+
+  section { display: flex; flex-direction: column; gap: 16px; scroll-margin-top: 16px; }
+  h2 { font-size: 24px; font-weight: 700; line-height: 1.25; margin: 0; text-wrap: balance; }
+  h3 { font-size: 17px; font-weight: 600; line-height: 1.35; margin: 0; }
+  p { margin: 0; max-width: 68ch; }
+  .muted { color: var(--muted); }
+  .small { font-size: 14px; }
+  code {
+    font-family: var(--font-mono);
+    font-size: 0.86em;
+    background: var(--code-bg);
+    padding: 0.08em 0.36em;
+    border-radius: 5px;
+    overflow-wrap: anywhere;
+  }
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 0.86em;
+    background: var(--mark-bg);
+    color: var(--mark-ink);
+    padding: 0.08em 0.36em;
+    border-radius: 4px;
+    overflow-wrap: anywhere;
+  }
+
+  .platform {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 9px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .platform.android { background: var(--android-bg); color: var(--android); }
+  .platform.ios { background: var(--ios-bg); color: var(--ios); }
+
+  .inspect { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .pane {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+  .pane-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--line);
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .tree {
+    margin: 0;
+    padding: 12px 14px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1.75;
+    white-space: pre;
+    overflow-x: auto;
+    flex: 1;
+  }
+  .tree .k { color: var(--muted); }
+  .tree .hl { background: var(--mark-bg); color: var(--mark-ink); border-radius: 3px; padding: 0 3px; }
+  .pane-foot {
+    border-top: 1px dashed var(--line);
+    padding: 10px 14px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  figcaption { font-size: 14px; color: var(--muted); }
+  figure { margin: 0; display: flex; flex-direction: column; gap: 10px; }
+
+  .table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; min-width: 560px; }
+  th, td { text-align: left; vertical-align: top; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+  th {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  tbody tr:last-child td { border-bottom: 0; }
+  td code, td .tag { white-space: nowrap; }
+  td .tag + .tag { margin-left: 2px; }
+  .yes { font-weight: 600; }
+  .no { color: var(--warn); font-weight: 600; }
+  .part { color: var(--muted); }
+
+  .code {
+    position: relative;
+    background: var(--code-bg);
+    border-radius: var(--radius);
+  }
+  .code pre {
+    margin: 0;
+    padding: 14px 16px;
+    padding-right: 118px;
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1.65;
+  }
+  .copy {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font: 500 12px var(--font-body);
+    color: var(--ink);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 4px 10px;
+    cursor: pointer;
+  }
+  .copy:hover { border-color: var(--muted); }
+
+  .setup { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .setup > div { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+
+  ul.rules { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 8px; max-width: 70ch; }
+
+  .registry { display: flex; flex-direction: column; gap: 28px; }
+  .registry-tools {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 16px;
+  }
+  .registry-tools label { font-size: 14px; color: var(--muted); }
+  #tag-filter {
+    flex: 1 1 260px;
+    max-width: 420px;
+    font: 15px var(--font-body);
+    color: var(--ink);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 8px 12px;
+  }
+  #tag-filter::placeholder { color: var(--muted); }
+  .screen { display: flex; flex-direction: column; gap: 10px; }
+  .screen-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; }
+  .screen-head .small { color: var(--muted); }
+  .registry td:first-child { width: 34%; }
+  .registry td:last-child { color: var(--muted); width: 28%; }
+  .empty-result { color: var(--muted); font-size: 15px; }
+
+  .gaps { display: flex; flex-direction: column; gap: 0; border-top: 1px solid var(--line); }
+  .gap-item {
+    display: grid;
+    grid-template-columns: 132px 1fr;
+    gap: 16px;
+    padding-block: 16px;
+    border-bottom: 1px solid var(--line);
+  }
+  .gap-item .kind { padding-top: 2px; }
+  .gap-item .body { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+
+  ol.steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; counter-reset: step; }
+  ol.steps li {
+    counter-increment: step;
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    gap: 14px;
+  }
+  ol.steps li::before {
+    content: counter(step);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    display: grid;
+    place-items: center;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+  ol.steps .body { display: flex; flex-direction: column; gap: 6px; padding-top: 3px; }
+  ol.steps .title { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+
+  ol.asks { margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 10px; max-width: 70ch; }
+  ol.asks li::marker { color: var(--accent); font-weight: 700; }
+
+  .note {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    font-size: 15px;
+  }
+
+  footer {
+    border-top: 1px solid var(--line);
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--muted);
+  }
+  footer ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px; }
+
+  @media (max-width: 720px) {
+    .inspect, .setup { grid-template-columns: 1fr; }
+    .gap-item { grid-template-columns: 1fr; gap: 8px; }
+    .lead { font-size: 17px; }
+  }
+</style>
+
+<div class="page">
+  <header>
+    <div class="eyebrow">Байбол · Android и iOS · для QA</div>
+    <h1>Локаторы для Appium</h1>
+    <p class="lead">Мы добавляем элементам приложения теги — постоянные идентификаторы. По тегу автотест найдёт кнопку, поле или текст, даже если надпись или вёрстка поменяются. Одна и та же строка работает на Android и на iOS.</p>
+    <div class="chips">
+      <span class="chip ok">Готово: вход, PIN-код, главная, поиск, уведомления, заявка на займ, оплата, договоры, профиль, карты, сервисы, подпись по АСП, документы личности, экран результата, вакансии, новости, персональный менеджер, «О приложении», ИИ-чат</span>
+      <span class="chip ok">Теги в сборках 3.0.0.0 с 30 сентября — можно писать тесты</span>
+      <span class="chip ok">Теги с пометкой «3.0.1.0» — только в сборках 3.0.1.0</span>
+      <span class="chip warn">Часть кнопок меняет настоящие данные — см. «Осторожно»</span>
+      <span class="chip">Обновлено 13 ноября 2026</span>
+    </div>
+    <nav class="toc" aria-label="Содержание">
+      <a href="#find">Как искать</a>
+      <a href="#setup">Настройка Appium</a>
+      <a href="#caution">Осторожно</a>
+      <a href="#names">Имена</a>
+      <a href="#registry">Список тегов</a>
+      <a href="#platforms">Различия платформ</a>
+      <a href="#uncovered">Что не покрыто</a>
+      <a href="#rollout">Порядок внедрения</a>
+    </nav>
+  </header>
+
+  <section id="find">
+    <h2>Как искать элемент</h2>
+    <p>У каждого важного элемента есть тег — короткая строка вроде <span class="tag">access_code_key_1_button</span>. На Android тег лежит в атрибуте <code>resource-id</code>, на iOS — в атрибуте <code>name</code>.</p>
+    <figure>
+      <div class="inspect">
+        <div class="pane">
+          <div class="pane-head"><span class="platform android">Android</span><span>UiAutomator2</span></div>
+<pre class="tree">android.view.View
+  <span class="k">resource-id</span>  <span class="hl">access_code_key_1_button</span>
+  <span class="k">clickable</span>    true
+  └─ android.widget.TextView
+       <span class="k">text</span>  1</pre>
+          <div class="pane-foot">AppiumBy.id("access_code_key_1_button")</div>
+        </div>
+        <div class="pane">
+          <div class="pane-head"><span class="platform ios">iOS</span><span>XCUITest</span></div>
+<pre class="tree">XCUIElementTypeButton
+  <span class="k">name</span>   <span class="hl">access_code_key_1_button</span>
+  <span class="k">label</span>  1</pre>
+          <div class="pane-foot">AppiumBy.accessibilityId("access_code_key_1_button")</div>
+        </div>
+      </div>
+      <figcaption>Клавиша «1» на экране PIN-кода в Appium Inspector.</figcaption>
+    </figure>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Где</th><th>Android</th><th>iOS</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Java, Kotlin</td><td><code>AppiumBy.id("…")</code></td><td><code>AppiumBy.accessibilityId("…")</code></td></tr>
+          <tr><td>Python</td><td><code>AppiumBy.ID</code></td><td><code>AppiumBy.ACCESSIBILITY_ID</code></td></tr>
+          <tr><td>Page Object</td><td><code>@AndroidFindBy(id = "…")</code></td><td><code>@iOSXCUITFindBy(accessibility = "…")</code></td></tr>
+          <tr><td>XPath, запасной вариант</td><td><code>//*[@resource-id='…']</code></td><td><code>//*[@name='…']</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="setup">
+    <h2>Настройка Appium</h2>
+    <div class="setup">
+      <div>
+        <h3><span class="platform android">Android</span></h3>
+        <p>Драйвер UiAutomator2 по умолчанию дописывает к <code>id</code> имя пакета и ищет <code>&lt;пакет&gt;:id/access_code_key_1_button</code>. У наших тегов такого префикса нет, поэтому автодополнение нужно выключить:</p>
+        <div class="code">
+          <button class="copy" type="button" id="copy-caps" data-copy="caps-android">Копировать</button>
+<pre id="caps-android">{
+  "platformName": "Android",
+  "appium:automationName": "UiAutomator2",
+  "appium:disableIdLocatorAutocompletion": true
+}</pre>
+        </div>
+        <p class="small">Теги видны и внутри диалогов, шторок и выпадающих меню. Если какой-то тег не находится по <code>id</code>, включите в сессии настройку <code>mapTestTagToResourceId: true</code> (драйвер 8.4.0 и новее) и сообщите нам про этот элемент.</p>
+      </div>
+      <div>
+        <h3><span class="platform ios">iOS</span></h3>
+        <p>Дополнительно ничего настраивать не нужно. Ищите стратегией <code>accessibility id</code>: она сверяет атрибут <code>name</code>, куда приложение кладёт тег.</p>
+        <p>Приложение строит дерево элементов само, когда его запрашивает драйвер, — VoiceOver включать не надо.</p>
+      </div>
+    </div>
+    <div class="note" style="display: flex; flex-direction: column; gap: 8px;">
+      <h3>Перед прогоном на demo</h3>
+      <p>Сборка demo работает с демо-базой 1С через шлюз. Убедитесь, что шлюз запущен: запустить его может любой сотрудник — разработчик, QA или аналитик.</p>
+      <p>Если в приложении бесконечная загрузка, а запросы падают по таймауту через 90 секунд, это не ошибка приложения. Кроме поломки стенда, причин обычно две: не запущен шлюз или бэкенд обновляет демо-конфигурацию — это часто бывает в течение рабочего дня. В первом случае запустите шлюз, во втором подождите.</p>
+    </div>
+  </section>
+
+  <section id="caution">
+    <h2>Осторожно: настоящие действия</h2>
+    <p>Автотест нажимает кнопки так же, как человек, и запросы уходят на настоящие серверы. Ниже — нажатия, последствия которых не отменить. Если сценарию нужна такая кнопка, договоритесь с нами о стенде и тестовых данных заранее. В тестах удобно завести список тегов, которые тест не нажимает без явного разрешения в сценарии.</p>
+
+    <h3>Сборки release и debug: боевой бэкенд и данные настоящего клиента</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Действие</th><th>Что произойдёт</th><th>Кнопка и тег</th></tr></thead>
+        <tbody>
+          <tr><td>Оплата привязанной картой</td><td>Деньги списываются с карты сразу, без подтверждения и без кода</td><td>«Внести платёж»: <span class="tag">payment_pay_button</span></td></tr>
+          <tr><td>Заявка на займ</td><td>Настоящая заявка в сервисе заявок</td><td>«Отправить заявку» в анкете и на экране продукта: <span class="tag">loan_application_send_button</span> <span class="tag">product_details_send_button</span></td></tr>
+          <tr><td>Предодобренный займ</td><td>Создаётся заявка на займ</td><td>«Подтвердить»: <span class="tag">pre_approved_loan_confirm_button</span></td></tr>
+          <tr><td>Подпись заявки и перевод денег на карту</td><td>Заявка подписывается, деньги уходят на карту клиента</td><td>Поле кода <span class="tag">sms_verification_code_input</span>: код проверяется сам, как только введены все цифры. <span class="platform android">Android</span> «Вставить» в снекбаре с пришедшим кодом: <span class="tag">snackbar_action_button</span></td></tr>
+          <tr><td>Подпись документов по АСП</td><td>Клиент подписывает соглашение об АСП и согласие на обработку данных</td><td>Поле кода <span class="tag">asp_verification_code_input</span>: код проверяется сам, как только введены все цифры. «Вставить» в снекбаре с кодом из ссылки: <span class="tag">snackbar_action_button</span></td></tr>
+          <tr><td>Код подтверждения</td><td>SMS на телефон клиента</td><td>Открытие экрана кода и «Отправить код повторно»: <span class="tag">sms_verification_resend_button</span></td></tr>
+          <tr><td>Отказ от займа в период охлаждения</td><td>Займ отменяется, вернуть его нельзя</td><td>«Отказаться» и «Да, отказаться» в диалоге: <span class="tag">contract_details_refuse_button</span> <span class="tag">contract_details_refuse_dialog_confirm_button</span></td></tr>
+          <tr><td>Фото профиля</td><td>Новое фото сохраняется у клиента, сохранённое удаляется</td><td>«Сохранить фото»: <span class="tag">profile_photo_save_button</span>; «Удалить фото» и подтверждение: <span class="tag">profile_photo_delete_button</span> <span class="tag">profile_photo_delete_dialog_confirm_button</span></td></tr>
+          <tr><td>Отвязка карты</td><td>Карта отвязывается от клиента</td><td>«Отвязать карту» в меню карты и «Отвязать» в диалоге: <span class="tag">bank_cards_unlink_button</span> <span class="tag">bank_cards_unlink_dialog_confirm_button</span></td></tr>
+          <tr><td>Документ личности</td><td>Создаётся документ клиента, снимки уходят на сервер</td><td>«Сохранить документ»: <span class="tag">add_identity_document_save_button</span></td></tr>
+          <tr><td>Фото с паспортом</td><td>Фото уходит на сервер</td><td>«Подтвердить»: <span class="tag">photo_with_passport_confirm_button</span></td></tr>
+          <tr><td>ИИ-чат</td><td>При открытии создаётся чат, сообщение и быстрый вопрос уходят боту</td><td>Открытие чата, быстрый вопрос и «Отправить»: <span class="tag">bottom_bar_ai_chat_button</span> <span class="tag">ai_chat_quick_question_item</span> <span class="tag">ai_chat_send_button</span></td></tr>
+          <tr><td>Вход</td><td>При каждом входе — звонок или SMS с кодом на номер, может появиться капча</td><td>Страница входа</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small muted">Ещё два следствия: release отправляет события в продуктовую аналитику, так что каждый прогон попадёт в статистику, а на скриншотах упавших тестов будут данные клиента.</p>
+
+    <h3>Сборка demo: не всё уходит на демо-стенд</h3>
+    <p>На демо-стенд ходят вход и основной бэкенд. Эти действия и из demo попадают в боевые сервисы:</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Действие</th><th>Что произойдёт</th><th>Кнопка и тег</th></tr></thead>
+        <tbody>
+          <tr><td>Заявка на займ</td><td>Заявка уходит в боевой сервис заявок, пометки «тест» в ней нет</td><td><span class="tag">loan_application_send_button</span> <span class="tag">product_details_send_button</span></td></tr>
+          <tr><td>Оплата по ссылке и через СБП, привязка карты</td><td>Открываются боевые платёжные страницы: оплата и привязка введённой карты — настоящие</td><td>«Внести платёж» (<span class="tag">payment_pay_button</span>) со способом «Картой онлайн» или СБП; привязка карты — «Добавить карту»: <span class="tag">bank_cards_add_card_button</span></td></tr>
+          <tr><td>Оплата привязанной картой</td><td>Уходит на демо-стенд. Списывает ли он деньги с привязанной карты, мы не проверяли — до конца не доводите</td><td>«Внести платёж»: <span class="tag">payment_pay_button</span></td></tr>
+          <tr><td>Отклик на вакансию</td><td>Уходит настоящее письмо</td><td>«Отправить анкету»: <span class="tag">job_form_send_button</span></td></tr>
+          <tr><td>ИИ-чат</td><td>При открытии создаётся чат на боевом сервисе, сообщение и быстрый вопрос уходят боевому боту. Быстрый вопрос отправляется сразу, одним нажатием</td><td>Открытие чата, быстрый вопрос и «Отправить»: <span class="tag">bottom_bar_ai_chat_button</span> <span class="tag">ai_chat_quick_question_item</span> <span class="tag">ai_chat_send_button</span></td></tr>
+          <tr><td>Чат поддержки</td><td>На Android чат один для всех сборок: сообщения из demo увидят операторы настоящей поддержки. На iOS не проверяли — считайте, что так же</td><td>«Задать вопрос» в нижнем меню, «Чат с поддержкой», «Связаться с компанией», «Остались вопросы?» на экране результата: <span class="tag">bottom_bar_chat_button</span> <span class="tag">contact_us_chat_button</span> <span class="tag">company_info_contact_button</span> <span class="tag">result_questions_button</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="names">
+    <h2>Как устроены имена</h2>
+    <ul class="rules">
+      <li>Латиница, нижний регистр, слова через подчёркивание.</li>
+      <li>Формат <code>&lt;экран&gt;_&lt;элемент&gt;_&lt;тип&gt;</code>, например <span class="tag">access_code_clear_button</span>.</li>
+      <li>Тип стоит в конце: <code>_button</code>, <code>_input</code>, <code>_title</code>, <code>_subtitle</code>, <code>_text</code>, <code>_message</code>, <code>_link</code>, <code>_checkbox</code>, <code>_radio</code>, <code>_switch</code>, <code>_slider</code>, <code>_timer</code>, <code>_progress</code>, <code>_list</code>, <code>_item</code>, <code>_card</code>, <code>_image</code>, <code>_error</code>, <code>_web_view</code>, <code>_pdf_view</code>, <code>_map</code>.</li>
+      <li>Одинаковые элементы получают один тег: баннеры, новости, результаты поиска, карточки. Берите их списком через <code>findElements</code> и выбирайте по тексту или по порядку.</li>
+      <li>У частей составного элемента тег продолжает тег элемента: слайдер <span class="tag">home_loan_application_sum_slider</span>, его заголовок <span class="tag">home_loan_application_sum_slider_title</span> и значение <span class="tag">home_loan_application_sum_slider_value</span>.</li>
+      <li>Элементы, которые есть на многих экранах, называются без экрана: <span class="tag">top_bar_back_button</span>, <span class="tag">snackbar_message</span>, <span class="tag">loader</span>. Теги <span class="tag">dialog_title</span> и соседние — у стандартных диалогов (запросы разрешений, диалог про уведомления). У диалога, который есть только на одном экране, теги этого экрана.</li>
+      <li>В тегах не бывает данных пользователя: телефона, номера карты или договора, ФИО, сумм. Тег — всегда одна и та же строка.</li>
+      <li>Тег не зависит от текста на экране и от темы оформления. Если тег придётся переименовать, предупредим заранее.</li>
+    </ul>
+  </section>
+
+  <section id="registry" class="registry">
+    <div class="screen-head">
+      <h2>Список тегов</h2>
+      <span class="small">Пилот — 28 сентября, займы, оплата, договоры и профиль — 29 сентября, карты, сервисы, подпись по АСП, документы личности, экран результата, вакансии, новости, персональный менеджер, «О приложении» и ИИ-чат — 30 сентября, дополнение карточек займов — 9 октября, главная — 14 октября, регион действия у патента — 3 ноября, подтверждение даты рождения при входе — 13 ноября 2026</span>
+    </div>
+    <div class="registry-tools">
+      <label for="tag-filter">Найти элемент или тег</label>
+      <input id="tag-filter" type="search" placeholder="Например, pay или «назад»" autocomplete="off">
+    </div>
+    <p class="empty-result" id="registry-empty" hidden>Ничего не найдено. Попробуйте часть тега, например <code>home</code>.</p>
+
+    <div class="screen" data-screen>
+      <h3>На всех экранах</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Элемент</th><th>Тег</th><th>Когда есть</th></tr></thead>
+          <tbody>
+            <tr><td>Заголовок экрана</td><td><span class="tag">top_bar_title</span></td><td>на экранах с верхней панелью</td></tr>
+            <tr><td>Кнопка «Назад»</td><td><span class="tag">top_bar_back_button</span></td><td>и на экранах, где она без панели: PIN-код, профиль, кадрирование фото, логи разработчика, страница входа (веб) <span class="chip next">3.0.1.0</span></td></tr>
+            <tr><td>Кнопка справа в верхней панели</td><td><span class="tag">top_bar_action_button</span></td><td>на отдельных экранах</td></tr>
+            <tr><td>Снекбар: текст</td><td><span class="tag">snackbar_message</span></td><td>подсказки и ошибки</td></tr>
+            <tr><td>Снекбар: кнопка («Повторить»)</td><td><span class="tag">snackbar_action_button</span></td><td>у ошибок с повтором</td></tr>
+            <tr><td>Снекбар: закрыть</td><td><span class="tag">snackbar_dismiss_button</span></td><td>у ошибок, которые не скрываются сами</td></tr>
+            <tr><td>Индикатор загрузки экрана</td><td><span class="tag">loader</span></td><td>пропадает, когда данные загрузились</td></tr>
+            <tr><td>Стандартный диалог: заголовок и текст</td><td><span class="tag">dialog_title</span> <span class="tag">dialog_message</span></td><td>запросы разрешений, диалог про уведомления</td></tr>
+            <tr><td>Стандартный диалог: кнопки</td><td><span class="tag">dialog_confirm_button</span> <span class="tag">dialog_dismiss_button</span></td><td>«Предоставить» / «Отказаться», «OK» / «Отмена»</td></tr>
+            <tr><td>Шторка «Откуда взять фото?»</td><td><span class="tag">photo_source_title</span> <span class="tag">photo_source_camera_button</span> <span class="tag">photo_source_gallery_button</span></td><td>смена фото профиля, документы</td></tr>
+            <tr><td>Закрыть шторку выбора фото</td><td><span class="tag">photo_source_close_button</span></td><td>узкая прозрачная область над шторкой</td></tr>
+            <tr><td>Меню разработчика: кнопка, пункты, переключатели</td><td><span class="tag">debug_menu_button</span> <span class="tag">debug_menu_item</span> <span class="tag">debug_menu_item_checkbox</span></td><td>только в тестовых сборках</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="screen" data-screen>
+      <h3>Нижнее меню</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Элемент</th><th>Тег</th><th>Когда есть</th></tr></thead>
+          <tbody>
+            <tr><td>Главная</td><td><span class="tag">bottom_bar_home_button</span></td><td>на главных разделах</td></tr>
+            <tr><td>Получить деньги</td><td><span class="tag">bottom_bar_get_loan_button</span></td><td>на главных разделах</td></tr>
+            <tr><td>ИИ-чат (круглая кнопка в центре)</td><td><span class="tag">bottom_bar_ai_chat_button</span></td><td>если ИИ-чат включён</td></tr>
+            <tr><td>Оплатить</td><td><span class="tag">bottom_bar_payment_button</span></td><td>на главных разделах</td></tr>
+            <tr><td>Задать вопрос</td><td><span class="tag">bottom_bar_chat_button</span></td><td>на главных разделах</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="screen" data-screen>
+      <h3>Вход</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Элемент</th><th>Тег</th><th>Когда есть</th></tr></thead>
+          <tbody>
+            <tr><td>Войти/Зарегистрироваться</td><td><span class="tag">sign_in_button</span></td><td>неактивна, пока не отмечено согласие</td></tr>
+            <tr><td>Чекбокс согласия</td><td><span class="tag">sign_in_policy_checkbox</span></td><td></td></tr>
+            <tr><td>Ссылка на условия обработки данных</td><td><span class="tag">sign_in_policy_link</span></td><td></td></tr>
+            <tr><td>Страница входа (веб)</td><td><span class="tag">sign_in_web_view</span></td><td>после нажатия «Войти»; поля страницы — см. «Что не покрыто»</td></tr>
+            <tr><td>Назад со страницы входа <span class="chip next">3.0.1.0</span></td><td><span class="tag">top_bar_back_button</span></td><td>красная стрелка поверх страницы в левом верхнем углу; верхней панели на странице входа больше нет, тег прежний. Возвращает на экран «Войти»</td></tr>
+            <tr><td>Загрузка страницы входа</td><td><span class="tag">loader</span></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="screen" data-screen>
+      <div class="screen-head"><h3>Вход: подтверждение даты рождения <span class="chip next">3.0.1.0</span></h3><span class="small">после кода со страницы входа, если сервер просит подтвердить дату рождения; до экрана «Задайте код»</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Элемент</th><th>Тег</th><th>Когда есть</th></tr></thead>
+          <tbody>
+            <tr><td>Заголовок панели «Подтверждение аккаунта» и «Назад»</td><td><span class="tag">top_bar_title</span> <span class="tag">top_bar_back_button</span></td><td>«Назад» выходит из аккаунта и возвращает на экран «Войти»</td></tr>
+            <tr><td>«Подтвердите дату рождения» и пояснение</td><td><span class="tag">sign_in_birth_date_title</span> <span class="tag">sign_in_birth_date_message</span></td><td></td></tr>
+            <tr><td>Поле даты рождения</td><td><span class="tag">sign_in_birth_date_input</span></td><td>только цифры, точки ставит маска ДД.ММ.ГГГГ. После 8-й цифры дата проверяется сразу и клавиатура скрывается; нажатие на поле открывает её снова</td></tr>
+            <tr><td>Текст ошибки под полем</td><td><span class="tag">sign_in_birth_date_input_error</span></td><td>сразу после 8-й цифры, если дата некорректная, в будущем или клиенту меньше 18 лет; пропадает при правке даты. Запрос при этом не уходит</td></tr>
+            <tr><td>Далее</td><td><span class="tag">sign_in_birth_date_next_button</span></td><td>активна, когда введены 8 цифр и ошибки нет. Неверная дата тратит попытку — см. шаг «Подтверждение даты рождения» в <a href="#rollout">«Порядке внедрения»</a></td></tr>
+            <tr><td>Ошибка запроса «Не удалось проверить дату рождения…»</td><td><span class="tag">snackbar_message</span></td><td>снекбар вверху с красной иконкой «!»; у иконки тега нет. Попытка при этом не тратится</td></tr>
+            <tr><td>«Дата рождения отличается от имеющихся данных»: заголовок и текст с номером контакт-центра</td><td><span class="tag">sign_in_birth_date_mismatch_title</span> <span class="tag">sign_in_birth_date_mismatch_message</span></td><td>после неверной даты. Номер — часть текста, отдельно не нажимается; позвонить — кнопкой «Позвонить»</td></tr>
+            <tr><td>«Осталась 1 попытка» или «Попытки закончились…»</td><td><span class="tag">sign_in_birth_date_attempts_text</span></td><td>на том же экране</td></tr>
+            <tr><td>Повторить</td><td><span class="tag">sign_in_birth_date_retry_button</span></td><td>пока попытки есть; возвращает к вводу даты</td></tr>
+            <tr><td>Выйти</td><td><span class="tag">sign_in_sign_out_button</span></td><td>вместо «Повторить», когда попытки закончились; выходит из аккаунта</td></tr>
+            <tr><td>Позвонить</td><td><span class="tag">sign_in_support_call_button</span></td><td>на экране расхождения; открывает набор номера</td></tr>
+            <tr><td>«Не удалось войти»: заголовок, текст, «Повторить»</td><td><span class="tag">sign_in_identify_error_title</span> <span class="tag">sign_in_identify_error_message</span> <span class="tag">sign_in_identify_retry_button</span></td><td>если сразу после кода сервер не ответил; повторный сбой выходит из аккаунта. Есть «Назад» — <span class="tag">top_bar_back_button</span>, без заголовка</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">Теги с пометкой «3.0.1.0» добавлены 13 ноября 2026 и есть только в сборках 3.0.1.0, собранных после этого. В сборках 3.0.0.0 их нет.</p>
+    </div>
+
+    <div class="screen" data-screen>
+      <h3>PIN-код</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Элемент</th><th>Тег</th><th>Когда есть</th></tr></thead>
+          <tbody>
+            <tr><td>Заголовок: «Задайте код», «Повторите код», «Введите код»</td><td><span class="tag">access_code_title</span></td><td></td></tr>
+            <tr><td>Ошибка, например «Коды не совпали»</td><td><span class="tag">access_code_error</span></td><td>пустой текст, если ошибки нет</td></tr>
+            <tr><td>Цифры 0–9</td><td><span class="tag">access_code_key_0_button</span> … <span class="tag">access_code_key_9_button</span></td><td></td></tr>
+            <tr><td>Стереть</td><td><span class="tag">access_code_clear_button</span></td><td></td></tr>
+            <tr><td>Вход по биометрии</td><td><span class="tag">access_code_biometric_button</span></td><td>вместо «Стереть», пока код не начали вводить</td></tr>
+            <tr><td>Забыли код?</td><td><span class="tag">access_code_forgot_button</span></td><td>при входе по коду</td></tr>
+            <tr><td>Ввести заново</td><td><span class="tag">access_code_retry_button</span></td><td>после несовпадения кодов</td></tr>
+            <tr><td>Назад</td><td><span class="tag">top_bar_back_button</span></td><td>при смене кода</td></tr>
+            <tr><td>Диалог «Использовать биометрию?»</td><td><span class="tag">access_code_biometric_dialog_title</span> <span class="tag">access_code_biometric_dialog_no_button</span> <span class="tag">access_code_biometric_dialog_yes_button</span></td><td>после создания кода, если есть биометрия</td></tr>
+            <tr><td>Диалог «Сбросить код доступа?»</td><td><span class="tag">access_code_forgot_dialog_title</span> <span class="tag">access_code_forgot_dialog_message</span> <span class="tag">access_code_forgot_dialog_no_button</span> <span class="tag">access_code_forgot_dialog_yes_button</span></td><td>после «Забыли код?»</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="screen" data-screen>
+      <h3>Главная</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Элемент</th><th>Тег</th><th>Когда есть</th></tr></thead>
+          <tbody>
+            <tr><td>Прокручиваемый список экрана</td><td><span class="tag">home_list</span></td><td>на iOS — элемент типа <code>Other</code></td></tr>
+            <tr><td>Аватар (профиль)</td><td><span class="tag">home_avatar_button</span></td><td></td></tr>
+            <tr><td>Поиск в шапке</td><td><span class="tag">home_search_button</span></td><td>когда список прокручен. Тег на всём круге: раньше он стоял на иконке внутри, а сам круг открывал уведомления — см. <a href="#rollout">«Порядок внедрения»</a></td></tr>
+            <tr><td>Уведомления и счётчик непрочитанных</td><td><span class="tag">home_notifications_button</span> <span class="tag">home_notifications_count_text</span></td><td>счётчик — если есть непрочитанные</td></tr>
+            <tr><td>Меню сервисов</td><td><span class="tag">home_services_menu_button</span></td><td></td></tr>
+            <tr><td>Приветствие</td><td><span class="tag">home_greeting_text</span></td><td></td></tr>
+            <tr><td>Поле «Поиск» (открывает экран поиска)</td><td><span class="tag">home_search_field_button</span></td><td></td></tr>
+            <tr><td>Баннеры вверху</td><td><span class="tag">home_general_banner_item</span></td><td>листаются сами каждые 8 секунд</td></tr>
+            <tr><td>Сервисы: заголовок и баннеры</td><td><span class="tag">home_service_banners_title</span> <span class="tag">home_service_banner_item</span></td><td></td></tr>
+            <tr><td>Проверка в госбазах: заголовок и баннеры</td><td><span class="tag">home_government_checks_banners_title</span> <span class="tag">home_government_checks_banner_item</span></td><td></td></tr>
+            <tr><td>Продукты</td><td><span class="tag">home_products_banner_item</span></td><td>если клиенту показываются продукты</td></tr>
+            <tr><td>Жизнь в России: заголовок и баннеры</td><td><span class="tag">home_russia_life_banners_title</span> <span class="tag">home_russia_life_banner_item</span></td><td></td></tr>
+            <tr><td>Стрелка справа от заголовка группы баннеров <span class="chip next">3.0.1.0</span></td><td><span class="tag">home_service_banners_arrow_button</span> <span class="tag">home_government_checks_banners_arrow_button</span> <span class="tag">home_russia_life_banners_arrow_button</span></td><td>у «Сервисов», «Проверки в госбазах» и «Жизни в России»; открывает тот же раздел, что и заголовок</td></tr>
+            <tr><td>Ряд карточек займов <span class="chip next">3.0.1.0</span></td><td><span class="tag">home_loan_cards_list</span></td><td>если есть займы или нужно подписание. При нескольких карточках ряд листается вбок, при одной это контейнер карточки. Сами карточки — см. «Карточки займов»</td></tr>
+            <tr><td>Подписать документы по АСП</td><td><span class="tag">home_asp_signing_button</span></td><td>если нужно подписание; карточка в том же ряду</td></tr>
+            <tr><td>Заявка на займ: сумма</td><td><span class="tag">home_loan_application_sum_slider</span> <span class="tag">home_loan_application_sum_slider_title</span> <span class="tag">home_loan_application_sum_slider_value</span></td><td>если у клиента нет займов</td></tr>
+            <tr><td>Заявка на займ: срок</td><td><span class="tag">home_loan_application_term_slider</span> <span class="tag">home_loan_application_term_slider_title</span> <span class="tag">home_loan_application_term_slider_value</span></td><td>если у клиента нет займов</td></tr>
+            <tr><td>Отправить заявку</td><td><span class="tag">home_loan_application_send_button</span></td><td>если у клиента нет займов</td></tr>
+            <tr><td>Баннер «Получить займ»</td><td><span class="tag">home_get_loan_banner_button</span></td><td>вместо формы заявки</td></tr>
+            <tr><td>Мои займы, Мои карты</td><td><span class="tag">home_my_loans_button</span> <span class="tag">home_my_bank_cards_button</span></td><td></td></tr>
+            <tr><td>Курсы валют: валюта и курс</td><td><span class="tag">home_currency_name_text</span> <span class="tag">home_currency_rate_text</span></td><td>по строке на валюту</td></tr>
+            <tr><td>Новости: заголовок блока и новость</td><td><span class="tag">home_news_title</span> <span class="tag">home_news_item</span></td><td></td></tr>
+            <tr><td>Баннер вакансий</td><td><span class="tag">home_vacancies_banner_button</span></td><td></td></tr>
+            <tr><td>Офисы</td><td><span class="tag">home_offices_button</span></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">Теги с пометкой «3.0.1.0» добавлены 14 октября 2026 и есть только в сборках 3.0.1.0, у которых в названии версии дата и время 20261014-0816 или позже (время — UTC).</p>
+    </div>
+
+    <div class="screen" data-screen>
+      <div class="screen-head"><h3>Карточки займов</h3><span class="small">на главной и в «Моих займах». У экрана договора своя карточка — см. «Договор»</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Элемент</th><th>Тег</th><th>Когда есть</th></tr></thead>
+          <tbody>
+            <tr><td>Карточка договора, заявки, онлайн-заявки</td><td><span class="tag">loan_contract_card</span> <span class="tag">loan_request_card</span> <span class="tag">online_loan_request_card</span></td><td></td></tr>
+            <tr><td>Дата, статус, номер</td><td><span class="tag">loan_card_date_text</span> <span class="tag">loan_card_status_text</span> <span class="tag">loan_card_number_text</span></td><td>на iOS эти тексты есть и в <code>label</code> карточки</td></tr>
+            <tr><td>Остаток по займу: сумма <span class="chip next">3.0.1.0</span></td><td><span class="tag">loan_card_balance_text</span></td><td>у договора; подпись «Остаток по займу» без тега</td></tr>
+            <tr><td>Полоса выплаты <span class="chip next">3.0.1.0</span></td><td><span class="tag">loan_card_balance_progress</span></td><td>у договора; доля выплаты — см. <a href="#platforms">«Различия платформ»</a></td></tr>
+            <tr><td>«Платёж внесён» <span class="chip next">3.0.1.0</span></td><td><span class="tag">loan_card_payment_paid_text</span></td><td>у активного договора, когда текущий платёж внесён</td></tr>
+            <tr><td>Дата ближайшего платежа <span class="chip next">3.0.1.0</span></td><td><span class="tag">loan_card_next_payment_date_text</span></td><td>у активного договора, пока платёж не внесён</td></tr>
+            <tr><td>Внести платёж</td><td><span class="tag">loan_contract_pay_button</span></td><td>у активного или просроченного договора, если платёж не внесён. Сумма платежа — в тексте кнопки, например «оплата 5 000 ₽»</td></tr>
+            <tr><td>Просрочка: «Сумма с учетом штрафов:», «Пропущенный платеж» и его дата <span class="chip next">3.0.1.0</span></td><td><span class="tag">loan_card_overdue_text</span> <span class="tag">loan_card_missed_payment_text</span> <span class="tag">loan_card_overdue_date_text</span></td><td>у просроченного договора; сумма со штрафами — в тексте кнопки «оплата …»</td></tr>
+            <tr><td>«Займ полностью погашен» <span class="chip next">3.0.1.0</span></td><td><span class="tag">loan_card_repaid_text</span></td><td>у договора с запланированным закрытием, если долг погашен</td></tr>
+            <tr><td>«Внесите … для закрытия договора до …» <span class="chip next">3.0.1.0</span></td><td><span class="tag">loan_card_close_planned_text</span></td><td>у договора с запланированным закрытием, если долг остался; сумма и дата — в одном тексте</td></tr>
+            <tr><td>Дата закрытия <span class="chip next">3.0.1.0</span></td><td><span class="tag">loan_card_close_date_text</span></td><td>у закрытого договора</td></tr>
+            <tr><td>Срок и сумма займа <span class="chip next">3.0.1.0</span></td><td><span class="tag">loan_card_term_text</span> <span class="tag">loan_card_sum_text</span></td><td>у заявки и онлайн-заявки; подписи «Срок займа:» и «Сумма займа:» без тегов</td></tr>
+            <tr><td>Таймер <span class="chip next">3.0.1.0</span></td><td><span class="tag">loan_card_timer</span></td><td>у заявки: «Предложение доступно:» у предодобренного займа или «Деньги поступят на счет в течение» в период охлаждения</td></tr>
+            <tr><td>Подсказка <span class="chip next">3.0.1.0</span></td><td><span class="tag">loan_card_hint_text</span></td><td>у заявки: «Деньги скоро поступят на счет» или «Договор находится в периоде "Охлаждения"». На карточке одна подсказка за раз</td></tr>
+            <tr><td>Подписать заявку</td><td><span class="tag">loan_request_sign_button</span></td><td>у заявки, которую нужно подписать</td></tr>
+            <tr><td>Продолжить (получить деньги)</td><td><span class="tag">loan_request_continue_button</span></td><td>у одобренной заявки</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">Теги с пометкой «3.0.1.0» добавлены 9 октября 2026 и есть только в сборках 3.0.1.0, у которых в названии версии дата и время 20261009-1019 или позже (время — UTC). В сборках 3.0.0.0 их нет. Если на главной несколько карточек, «Платёж внесён», ближайший платёж, просрочка, закрытие, таймер, подсказки и кнопки есть в дереве только у карточки, которая сейчас на экране. В «Моих займах» и на главной с одной карточкой они видны всегда.</p>
+    </div>
+
+    <div class="screen" data-screen>
+      <div class="screen-head"><h3>Заявка на займ: анкета</h3><span class="small">«Получить деньги» в нижнем меню или «Отправить заявку» на главной</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Элемент</th><th>Тег</th><th>Когда есть</th></tr></thead>
+          <tbody>
+            <tr><td>Прокручиваемый список экрана</td><td><span class="tag">loan_application_list</span></td><td>на iOS — элемент типа <code>Other</code></td></tr>
+            <tr><td>Сумма: слайдер, заголовок, значение, минимум, максимум</td><td><span class="tag">loan_conditions_sum_slider</span> <span class="tag">loan_conditions_sum_slider_title</span> <span class="tag">loan_conditions_sum_slider_value</span> <span class="tag">loan_conditions_sum_slider_min</span> <span class="tag">loan_conditions_sum_slider_max</span></td><td>те же теги на экране продукта; на iOS слайдер — элемент типа <code>Other</code>, значение — в <code>value</code></td></tr>
+            <tr><td>Срок: слайдер, заголовок, значение, минимум, максимум</td><td><span class="tag">loan_conditions_term_slider</span> <span class="tag">loan_conditions_term_slider_title</span> <span class="tag">loan_conditions_term_slider_value</span> <span class="tag">loan_conditions_term_slider_min</span> <span class="tag">loan_conditions_term_slider_max</span></td><td>те же теги на экране продукта; на iOS слайдер — элемент типа <code>Other</code>, значение — в <code>value</code></td></tr>
+            <tr><td>Ежемесячный платёж</td><td><span class="tag">loan_conditions_monthly_payment_text</span></td><td>появляется после расчёта</td></tr>
+            <tr><td>Пояснение к расчёту</td><td><span class="tag">loan_conditions_info_text</span></td><td></td></tr>
+            <tr><td>Город</td><td><span class="tag">loan_form_city_input</span></td><td></td></tr>
+            <tr><td>Имя, фамилия</td><td><span class="tag">loan_form_name_input</span> <span class="tag">loan_form_surname_input</span></td><td>у клиента из базы заполнены заранее</td></tr>
+            <tr><td>Гражданство: поле, выбранное значение, варианты</td><td><span class="tag">loan_form_citizenship_dropdown</span> <span class="tag">loan_form_citizenship_dropdown_value</span> <span class="tag">loan_form_citizenship_dropdown_option</span></td><td>только у нового клиента, которого нет в базе; варианты — в окне меню</td></tr>
+            <tr><td>Телефон</td><td><span class="tag">loan_form_phone_input</span></td><td></td></tr>
+            <tr><td>Текст под полем</td><td><span class="tag">&lt;тег поля&gt;_error</span>, например <span class="tag">loan_form_city_input_error</span></td><td>пока поле пустое — подсказка «Необходимо заполнить поле», ошибку от неё отличает только цвет. Проверяйте текст, а не наличие элемента</td></tr>
+            <tr><td>Отправить заявку</td><td><span class="tag">loan_application_send_button</span></td><td>создаёт настоящую заявку — см. «Осторожно»</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="screen" data-screen>
+      <div class="screen-head"><h3>Продукты</h3><span class="small">«Все сервисы» → «Продукты»</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Элемент</th><th>Тег</th><th>Когда есть</th></tr></thead>
+          <tbody>
+            <tr><td>Прокручиваемый список экрана</td><td><span class="tag">products_list</span></td><td>на iOS — элемент типа <code>Other</code></td></tr>
+            <tr><td>Текст вверху экрана</td><td><span class="tag">products_info_text</span></td><td></td></tr>
+            <tr><td>Карточка продукта</td><td><span class="tag">products_item</span></td><td>по карточке на продукт</td></tr>
+            <tr><td>Сумма, срок, бесплатный период</td><td><span class="tag">products_item_sum_text</span> <span class="tag">products_item_term_text</span> <span class="tag">products_item_guarantee_text</span></td><td>бесплатный период — не у всех продуктов</td></tr>
+            <tr><td>Получить деньги</td><td><span class="tag">products_item_get_money_button</span></td><td>открывает экран продукта</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="screen" data-screen>
+      <div class="screen-head"><h3>Экран продукта</h3><span class="small">после «Получить деньги» на карточке продукта или с баннера продукта на главной</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Элемент</th><th>Тег</th><th>Когда есть</th></tr></thead>
+          <tbody>
+            <tr><td>Прокручиваемый список экрана</td><td><span class="tag">product_details_list</span></td><td>на iOS — элемент типа <code>Other</code></td></tr>
+            <tr><td>Описание продукта</td><td><span class="tag">product_details_description_text</span></td><td></td></tr>
+            <tr><td>Подробнее, Программа «Кафолат»</td><td><span class="tag">product_details_show_more_button</span> <span class="tag">product_details_kafolat_button</span></td><td></td></tr>
+            <tr><td>Сумма, срок, платёж, пояснение</td><td><span class="tag">loan_conditions_…</span></td><td>те же теги, что в анкете</td></tr>
+            <tr><td>Город, имя, фамилия, гражданство, телефон</td><td><span class="tag">loan_form_…</span></td><td>те же теги, что в анкете</td></tr>
+            <tr><td>Согласие на обработку данных: чекбокс и текст со ссылкой</td><td><span class="tag">product_details_personal_data_checkbox</span> <span class="tag">product_details_personal_data_link</span></td><td>на iOS оба — <code>Button</code></td></tr>
+            <tr><td>Отправить заявку</td><td><span class="tag">product_details_send_button</span></td><td>создаёт настоящую заявку — см. «Осторожно»</td></tr>
+            <tr><td>Условия получения: заголовок и пункт</td><td><span class="tag">product_details_conditions_title</span> <span class="tag">product_details_condition_text</span></td><td>по тексту на пункт</td></tr>
+            <tr><td>Форма предоставления: заголовок и текст</td><td><span class="tag">product_details_withdrawal_title</span> <span class="tag">product_details_withdrawal_text</span></td><td></td></tr>
+            <tr><td>Документы: заголовок и пункт</td><td><span class="tag">product_details_documents_title</span> <span class="tag">product_details_document_text</span></td><td>по тексту на документ</td></tr>
+            <tr><td>Примечания внизу</td><td><span class="tag">product_details_additional_documents_text</span> <span class="tag">product_details_additional_info_text</span></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="screen" data-screen>
+      <div class="screen-head"><h3>Договоры</h3><span class="small">«Мои займы» на главной</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Элемент</th><th>Тег</th><th>Когда есть</th></tr></thead>
+          <tbody>
+            <tr><td>Вкладки «активные» и «закрытые»</td><td><span class="tag">contracts_active_tab</span> <span class="tag">contracts_closed_tab</span></td><td>если есть закрытые договоры или заявки</td></tr>
+            <tr><td>Список вкладки</td><td><span class="tag">contracts_active_list</span> <span class="tag">contracts_closed_list</span></td><td>без вкладок — один список, <span class="tag">contracts_active_list</span></td></tr>
+            <tr><td>Карточки договоров и заявок</td><td><span class="tag">loan_contract_card</span> <span class="tag">online_loan_request_card</span> …</td><td>см. «Карточки займов»</td></tr>
+            <tr><td>Баннер «Получить займ»</td><td><span class="tag">contracts_get_loan_banner_button</span></td><td>если нет активных договоров</td></tr>
+            <tr><td>Заглушка «Нет активных договоров»: блок, заголовок, текст</td><td><span class="tag">contracts_empty</span> <span class="tag">contracts_empty_title</span> <span class="tag">contracts_empty_text</span></td><td>если нет активных договоров</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="screen" data-screen>
+      <div class="screen-head"><h3>Выбор способа оплаты</h3><span class="small">экран «Оплатить»</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Элемент</th><th>Тег</th><th>Когда есть</th></tr></thead>
+          <tbody>
+            <tr><td>Заголовок «Способ оплаты»</td><td><span class="tag">payment_method_title</span></td><td>после выбора договора</td></tr>
+            <tr><td>Поле выбора и выбранное значение</td><td><span class="tag">payment_method_dropdown</span> <span class="tag">payment_method_dropdown_value</span></td><td></td></tr>
+            <tr><td>Вариант оплаты</td><td><span class="tag">payment_method_dropdown_option</span></td><td>в окне меню; по элементу на способ</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="screen" data-screen>
+      <div class="screen-head"><h3>Оплата: «Оплатить»</h3><span class="small">«Оплатить» в нижнем меню</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Элемент</th><th>Тег</th><th>Когда есть</th></tr></thead>
+          <tbody>
+            <tr><td>Выбор договора: поле и выбранное значение</td><td><span class="tag">other_payment_contract_dropdown</span> <span class="tag">other_payment_contract_dropdown_value</span></td><td>значение — «Выберите договор», номер договора или «Ввести вручную»</td></tr>
+            <tr><td>Вариант выбора: «Ввести вручную» и договоры клиента</td><td><span class="tag">other_payment_contract_dropdown_option</span></td><td>список раскрывается под полем; договоры клиента появляются после загрузки</td></tr>
+            <tr><td>Номер чужого договора и текст под полем</td><td><span class="tag">other_payment_contract_number_input</span> <span class="tag">other_payment_contract_number_input_error</span></td><td>после «Ввести вручную»; при неверном номере — «Недопустимое значение»</td></tr>
+            <tr><td>Сумма и текст под полем</td><td><span class="tag">payment_sum_input</span> <span class="tag">payment_sum_input_error</span></td><td>после выбора договора; при недопустимой сумме — «Недопустимое значение»</td></tr>
+            <tr><td>Плановый платёж: подпись и сумма, которая подставляется в поле</td><td><span class="tag">payment_scheduled_sum_title</span> <span class="tag">payment_scheduled_sum_button</span></td><td>по своему договору, пока платёж не внесён</td></tr>
+            <tr><td>Способ оплаты</td><td><span class="tag">payment_method_…</span></td><td>см. «Выбор способа оплаты»</td></tr>
+            <tr><td>Текст о комиссии банка</td><td><span class="tag">payment_commission_text</span></td><td></td></tr>
+            <tr><td>Внести платёж</td><td><span class="tag">payment_pay_button</span></td><td>активна, когда выбраны договор, сумма и способ; проводит настоящую оплату — см. «Осторожно»</td></tr>
+            <tr><td>Страница оплаты</td><td><span class="tag">payment_web_view</span></td><td>только Android; на iOS страница открывается в Safari поверх приложения</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="screen" data-screen>
+      <div class="screen-head"><h3>Оплата по договору: «Внесение платежа»</h3><span class="small">«Оплатить заём» в деталях договора или «Внести платёж» на карточке договора</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Элемент</th><th>Тег</th><th>Когда есть</th></tr></thead>
+          <tbody>
+            <tr><td>Номер договора</td><td><span class="tag">payment_contract_title</span></td><td></td></tr>
+            <tr><td>Сумма, плановый платёж, способ оплаты, комиссия, «Внести платёж», страница оплаты</td><td><span class="tag">payment_…</span></td><td>те же теги, что на «Оплатить»</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="screen" data-screen>
+      <div class="screen-head"><h3>Экран результата</h3><span class="small">после оплаты, заявки, подписи, привязки карты, отказа от займа, справки и анкеты на вакансию. В debug и demo открывается и из меню разработчика анкеты на вакансию, анкеты займа и «Банковских карт»</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Элемент</th><th>Тег</th><th>Когда есть</th></tr></thead>
+          <tbody>
+            <tr><td>Успех или ошибка — весь экран</td><td><span class="tag">result_success</span> <span class="tag">result_error</span></td><td>на iOS — элемент типа <code>Other</code></td></tr>
+            <tr><td>Заголовок и текст</td><td><span class="tag">result_title</span> <span class="tag">result_message</span></td><td>текст есть не во всех сценариях</td></tr>
+            <tr><td>Контакты колл-центра</td><td><span class="tag">result_contact_center_text</span></td><td>только у ошибки</td></tr>
+            <tr><td>Новости и акции в Telegram</td><td><span class="tag">result_telegram_button</span></td><td>только у успеха; открывает Telegram</td></tr>
+            <tr><td>На главную</td><td><span class="tag">result_main_button</span></td><td>тег кнопки зависит от действия, а не от места: одна и та же кнопка бывает основной и второй</td></tr>
+            <tr><td>Остались вопросы?</td><td><span class="tag">result_questions_button</span></td><td>открывает чат поддержки — см. «Осторожно»</td></tr>
+            <tr><td>Мои карты</td><td><span class="tag">result_cards_button</span></td><td>после привязки карты</td></tr>
+            <tr><td>Вернуться к заявке, Вернуться к оплате</td><td><span class="tag">result_back_to_loan_button</span> <span class="tag">result_back_to_payment_button</span></td><td>после ошибки заявки или оплаты</td></tr>
+            <tr><td>«Назад» после ошибки</td><td><span class="tag">result_back_to_vacancies_button</span> <span class="tag">result_back_to_job_form_button</span> <span class="tag">result_back_to_contract_details_button</span></td><td>к вакансиям, к анкете, к договору</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="screen" data-screen>
+      <div class="screen-head"><h3>Договор</h3><span class="small">карточка договора на главной или в «Договорах»</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Элемент</th><th>Тег</th><th>Когда есть</th></tr></thead>
+          <tbody>
+            <tr><td>Список экрана</td><td><span class="tag">contract_details_list</span></td><td>прокручивается</td></tr>
+            <tr><td>Карточка: дата и статус договора</td><td><span class="tag">contract_details_card_date_text</span> <span class="tag">contract_details_card_status_text</span></td><td></td></tr>
+            <tr><td>Ближайший платёж: сумма и срок</td><td><span class="tag">contract_details_next_payment_sum_text</span> <span class="tag">contract_details_next_payment_term_text</span></td><td>если платёж внесён — вместо суммы «Платёж внесён», срока нет; при просрочке срок — длительность просрочки</td></tr>
+            <tr><td>Оплатить заём, История платежей</td><td><span class="tag">contract_details_pay_button</span> <span class="tag">contract_details_payments_history_button</span></td><td>кроме периода охлаждения</td></tr>
+            <tr><td>Начало и окончание договора, сумма займа, сумма для досрочного погашения</td><td><span class="tag">contract_details_start_date_text</span> <span class="tag">contract_details_end_date_text</span> <span class="tag">contract_details_loan_sum_text</span> <span class="tag">contract_details_early_repayment_sum_text</span></td><td></td></tr>
+            <tr><td>Заголовок «График платежей»</td><td><span class="tag">contract_details_schedule_title</span></td><td>после загрузки графика</td></tr>
+            <tr><td>Строка графика</td><td><span class="tag">contract_details_schedule_item</span></td><td>по строке на платёж; нажатие раскрывает строку</td></tr>
+            <tr><td>«Погашенные платежи» и их строки</td><td><span class="tag">contract_details_paid_payments_button</span> <span class="tag">contract_details_paid_payment_item</span></td><td>если есть погашенные платежи; строки видны после нажатия</td></tr>
+            <tr><td>В строке платежа: дата и сумма</td><td><span class="tag">contract_details_payment_date_text</span> <span class="tag">contract_details_payment_sum_text</span></td><td>одинаковые у строк графика и погашенных платежей</td></tr>
+            <tr><td>В раскрытой строке: основной долг и проценты</td><td><span class="tag">contract_details_payment_loan_sum_text</span> <span class="tag">contract_details_payment_interest_sum_text</span></td><td>после нажатия на строку</td></tr>
+            <tr><td>Период охлаждения: таймер и его подпись</td><td><span class="tag">contract_details_cooling_period_timer</span> <span class="tag">contract_details_cooling_period_timer_title</span></td><td>только в период охлаждения</td></tr>
+            <tr><td>Период охлаждения: подсказки</td><td><span class="tag">contract_details_cooling_period_hint_text</span> <span class="tag">contract_details_money_transfer_hint_text</span></td><td>только в период охлаждения</td></tr>
+            <tr><td>Документы по займу, Отказаться</td><td><span class="tag">contract_details_documents_button</span> <span class="tag">contract_details_refuse_button</span></td><td>только в период охлаждения; отказ не отменить — см. «Осторожно»</td></tr>
+            <tr><td>Диалог отказа: заголовок, вопрос, пояснение</td><td><span class="tag">contract_details_refuse_dialog_title</span> <span class="tag">contract_details_refuse_dialog_subtitle</span> <span class="tag">contract_details_refuse_dialog_message</span></td><td>после «Отказаться»</td></tr>
+            <tr><td>Диалог отказа: «Да, отказаться» и «Вернуться к займу»</td><td><span class="tag">contract_details_refuse_dialog_confirm_button</span> <span class="tag">contract_details_refuse_dialog_dismiss_button</span></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="screen" data-screen>
+      <div class="screen-head"><h3>История платежей</h3><span class="small">«История платежей» на экране договора</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Элемент</th><th>Тег</th><th>Когда есть</th></tr></thead>
+          <tbody>
+            <tr><td>Список экрана</td><td><span class="tag">payments_history_list</span></td><td>прокручивается</td></tr>
+            <tr><td>Номер договора</td><td><span class="tag">payments_history_contract_number_text</span></td><td></td></tr>
+            <tr><td>Платёж: строка, дата, сумма</td><td><span class="tag">payments_history_item</span> <span class="tag">payments_history_item_date_text</span> <span class="tag">payments_history_item_sum_text</span></td><td>по строке на платёж</td></tr>
+            <tr><td>Заглушка «Вы ещё не внесли платёж»: блок, заголовок, текст</td><td><span class="tag">payments_history_empty</span> <span class="tag">payments_history_empty_title</span> <span class="tag">payments_history_empty_text</span></td><td>если платежей нет</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="screen" data-screen>
+      <div class="screen-head"><h3>Документы по договору</h3><span class="small">«Документы по займу» на экране договора, только в период охлаждения</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Элемент</th><th>Тег</th><th>Когда есть</th></tr></thead>
+          <tbody>
+            <tr><td>Номер договора</td><td><span class="tag">contract_documents_contract_number_text</span></td><td></td></tr>
+            <tr><td>Список документов, строка, название</td><td><span class="tag">contract_documents_list</span> <span class="tag">contract_documents_list_item</span> <span class="tag">contract_documents_list_item_text</span></td><td>после загрузки; строка открывает документ</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="screen" data-screen>
+      <div class="screen-head"><h3>Просмотр документа</h3><span class="small">строка списка документов, «Заказать справку»</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Элемент</th><th>Тег</th><th>Когда есть</th></tr></thead>
+          <tbody>
+            <tr><td>Индикатор загрузки</td><td><span class="tag">loader</span></td><td>пока документ загружается</td></tr>
+            <tr><td>PDF-документ</td><td><span class="tag">document_pdf_view</span></td><td>страницы внутри без тегов</td></tr>
+            <tr><td>Поделиться, Сохранить</td><td><span class="tag">document_share_button</span> <span class="tag">document_save_button</span></td><td>у PDF; «Сохранить» — только на Android</td></tr>
+            <tr><td>Документ-фото и кнопки поворота</td><td><span class="tag">document_image</span> <span class="tag">document_rotate_left_button</span> <span class="tag">document_rotate_right_button</span></td><td>если документ — фото</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="screen" data-screen>
+      <div class="screen-head"><h3>Справка об отсутствии задолженности</h3><span class="small">«Заказать справку об отсутствии задолженности» в профиле</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Элемент</th><th>Тег</th><th>Когда есть</th></tr></thead>
+          <tbody>
+            <tr><td>ФИО и телефон</td><td><span class="tag">debt_certificate_fio_text</span> <span class="tag">debt_certificate_phone_text</span></td><td>если справку можно заказать</td></tr>
+            <tr><td>Справка недоступна: заголовок и пояснение</td><td><span class="tag">debt_certificate_unavailable_title</span> <span class="tag">debt_certificate_unavailable_text</span></td><td>если справку заказать нельзя</td></tr>
+            <tr><td>Заказать справку</td><td><span class="tag">debt_certificate_get_button</span></td><td>открывает справку в просмотре документа; неактивна, если справку заказать нельзя</td></tr>
+            <tr><td>Пояснение под кнопкой</td><td><span class="tag">debt_certificate_support_text</span></td><td>кроме случая, когда справку заказать нельзя</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="screen" data-screen>
+      <div class="screen-head"><h3>Профиль</h3><span class="small">аватар на главной</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Элемент</th><th>Тег</th><th>Когда есть</th></tr></thead>
+          <tbody>
+            <tr><td>Аватар, имя, телефон</td><td><span class="tag">profile_avatar_button</span> <span class="tag">profile_name_text</span> <span class="tag">profile_phone_text</span></td><td>аватар открывает фото профиля, если клиент есть в базе</td></tr>
+            <tr><td>Мои договоры, Мои карты, Мои документы</td><td><span class="tag">profile_my_contracts_button</span> <span class="tag">profile_my_cards_button</span> <span class="tag">profile_my_documents_button</span></td><td>«Мои документы» — если клиент есть в базе</td></tr>
+            <tr><td>Персональный менеджер, справка, офисы, связаться с нами</td><td><span class="tag">profile_personal_manager_button</span> <span class="tag">profile_certificate_button</span> <span class="tag">profile_offices_button</span> <span class="tag">profile_contact_us_button</span></td><td></td></tr>
+            <tr><td>Заголовки «Настройки приложения» и «Информация»</td><td><span class="tag">profile_app_settings_title</span> <span class="tag">profile_information_title</span></td><td></td></tr>
+            <tr><td>Тема, код доступа</td><td><span class="tag">profile_theme_button</span> <span class="tag">profile_change_access_code_button</span></td><td></td></tr>
+            <tr><td>Вход по биометрии: переключатель или подсказка</td><td><span class="tag">profile_biometric_switch</span> <span class="tag">profile_biometric_help_button</span></td><td>переключатель — если на устройстве настроена биометрия, иначе кнопка подсказки</td></tr>
+            <tr><td>О компании, информация для клиента, о приложении</td><td><span class="tag">profile_about_company_button</span> <span class="tag">profile_client_info_button</span> <span class="tag">profile_about_app_button</span></td><td></td></tr>
+            <tr><td>Выйти</td><td><span class="tag">profile_logout_button</span></td><td>открывает диалог выхода</td></tr>
+            <tr><td>Диалог выхода: заголовок, текст, «Выйти», «Отмена»</td><td><span class="tag">profile_logout_dialog_title</span> <span class="tag">profile_logout_dialog_message</span> <span class="tag">profile_logout_dialog_confirm_button</span> <span class="tag">profile_logout_dialog_dismiss_button</span></td><td>после «Выйти» понадобится снова войти</td></tr>
+            <tr><td>Подсказка о биометрии: заголовок, текст, «Понятно»</td><td><span class="tag">profile_biometric_help_dialog_title</span> <span class="tag">profile_biometric_help_dialog_message</span> <span class="tag">profile_biometric_help_dialog_dismiss_button</span></td><td>после кнопки подсказки</td></tr>
+            <tr><td>Выбор темы: заголовок</td><td><span class="tag">profile_theme_dialog_title</span></td><td>после «Изменить тему приложения»</td></tr>
+            <tr><td>Выбор темы: светлая, тёмная, как в системе</td><td><span class="tag">profile_theme_light_radio</span> <span class="tag">profile_theme_dark_radio</span> <span class="tag">profile_theme_system_radio</span></td><td>подпись варианта — тег с <code>_text</code> на конце, например <span class="tag">profile_theme_dark_radio_text</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="screen" data-screen>
+      <div class="screen-head"><h3>Фото профиля</h3><span class="small">аватар в профиле</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Элемент</th><th>Тег</th><th>Когда есть</th></tr></thead>
+          <tbody>
+            <tr><td>Приглашение добавить фото и кнопка добавления</td><td><span class="tag">profile_photo_add_text</span> <span class="tag">profile_photo_add_button</span></td><td>если фото нет</td></tr>
+            <tr><td>Фото</td><td><span class="tag">profile_photo_image</span></td><td>если фото есть или выбрано новое</td></tr>
+            <tr><td>Изменить фото, Сохранить фото, Удалить фото</td><td><span class="tag">profile_photo_change_button</span> <span class="tag">profile_photo_save_button</span> <span class="tag">profile_photo_delete_button</span></td><td>«Сохранить» — у нового фото, «Удалить» — у сохранённого; обе меняют данные клиента — см. «Осторожно»</td></tr>
+            <tr><td>Откуда взять фото</td><td><span class="tag">photo_source_…</span></td><td>общая шторка, см. «На всех экранах»</td></tr>
+            <tr><td>Диалог удаления: заголовок, текст, «Удалить», «Отмена»</td><td><span class="tag">profile_photo_delete_dialog_title</span> <span class="tag">profile_photo_delete_dialog_message</span> <span class="tag">profile_photo_delete_dialog_confirm_button</span> <span class="tag">profile_photo_delete_dialog_dismiss_button</span></td><td>после «Удалить фото»</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="screen" data-screen>
+      <div class="screen-head"><h3>Кадрирование фото</h3><span class="small">после выбора фото в галерее или снимка</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Элемент</th><th>Тег</th><th>Когда есть</th></tr></thead>
+          <tbody>
+            <tr><td>Фото в рамке</td><td><span class="tag">photo_crop_image</span></td><td>масштаб и сдвиг — жестами</td></tr>
+            <tr><td>Готово</td><td><span class="tag">photo_crop_done_button</span></td><td>возвращает к фото профиля с новым снимком; на сервер не отправляет</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="screen" data-screen>
+      <div class="screen-head"><h3>Офисы</h3><span class="small">«Офисы Байбол» в профиле</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Элемент</th><th>Тег</th><th>Когда есть</th></tr></thead>
+          <tbody>
+            <tr><td>Карта и кнопка ближайшего офиса</td><td><span class="tag">offices_map</span> <span class="tag">offices_nearest_office_button</span></td><td>метки на карте без тегов; без доступа к геолокации кнопка открывает диалог</td></tr>
+            <tr><td>Список офисов и карточка</td><td><span class="tag">offices_list</span> <span class="tag">offices_item</span></td><td>по карточке на офис; нажатие показывает офис на карте</td></tr>
+            <tr><td>В карточке: город, адрес, часы работы</td><td><span class="tag">offices_item_city_text</span> <span class="tag">offices_item_address_text</span> <span class="tag">offices_item_hours_text</span></td><td></td></tr>
+            <tr><td>В карточке: иконка звонка и номер</td><td><span class="tag">offices_item_call_button</span> <span class="tag">offices_item_phone_link</span></td><td>открывают набор номера</td></tr>
+            <tr><td>В карточке: Проложить маршрут, Оставить отзыв</td><td><span class="tag">offices_item_route_button</span> <span class="tag">offices_item_feedback_button</span></td><td>маршрут — у офиса с адресом, отзыв — если есть ссылки на отзывы</td></tr>
+            <tr><td>Диалог отзыва: заголовок, Яндекс, Google, 2ГИС</td><td><span class="tag">offices_feedback_dialog_title</span> <span class="tag">offices_feedback_dialog_yandex_button</span> <span class="tag">offices_feedback_dialog_google_button</span> <span class="tag">offices_feedback_dialog_2gis_button</span></td><td>кнопка — если у офиса есть ссылка; открывает сайт карт</td></tr>
+            <tr><td>Диалог о геолокации: заголовок, текст, «Понятно»</td><td><span class="tag">offices_location_dialog_title</span> <span class="tag">offices_location_dialog_message</span> <span class="tag">offices_location_dialog_confirm_button</span></td><td>если доступа к геолокации нет</td></tr>
+            <tr><td><span class="platform ios">iOS</span> Выбор приложения для маршрута</td><td><span class="tag">offices_route_dialog_title</span> <span class="tag">offices_route_dialog_apple_maps_button</span> <span class="tag">offices_route_dialog_google_maps_button</span> <span class="tag">offices_route_dialog_yandex_maps_button</span> <span class="tag">offices_route_dialog_2gis_button</span></td><td>если установлено больше одного приложения карт; на Android — системный выбор</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="screen" data-screen>
+      <div class="screen-head"><h3>О компании</h3><span class="small">«О компании» в профиле</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Элемент</th><th>Тег</th><th>Когда есть</th></tr></thead>
+          <tbody>
+            <tr><td>Тексты о компании и о займах</td><td><span class="tag">company_info_about_text</span> <span class="tag">company_info_loan_text</span></td><td></td></tr>
+            <tr><td>Цели займа</td><td><span class="tag">company_info_loan_target_text</span></td><td>по элементу на пункт</td></tr>
+            <tr><td>Подробнее на сайте, Связаться с компанией</td><td><span class="tag">company_info_website_button</span> <span class="tag">company_info_contact_button</span></td><td>сайт открывается в браузере, «Связаться» — чат поддержки</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="screen" data-screen>
+      <div class="screen-head"><h3>Связаться с нами</h3><span class="small">«Связаться с нами» в профиле</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Элемент</th><th>Тег</th><th>Когда есть</th></tr></thead>
+          <tbody>
+            <tr><td>Позвонить по горячей линии</td><td><span class="tag">contact_us_call_button</span></td><td>открывает набор номера</td></tr>
+            <tr><td>Чат с поддержкой</td><td><span class="tag">contact_us_chat_button</span></td><td>открывает чат поддержки — см. «Осторожно»</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="screen" data-screen>
+      <div class="screen-head"><h3>Информация для клиента</h3><span class="small">«Информация для клиента» в профиле</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Элемент</th><th>Тег</th><th>Когда есть</th></tr></thead>
+          <tbody>
+            <tr><td>Список документов, строка, название</td><td><span class="tag">client_info_list</span> <span class="tag">client_info_list_item</span> <span class="tag">client_info_list_item_text</span></td><td>строка открывает документ — см. «Просмотр документа»</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="screen" data-screen>
+      <div class="screen-head"><h3>Персональный менеджер</h3><span class="small">«Персональный менеджер» в профиле или во «Всех сервисах»</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Элемент</th><th>Тег</th><th>Когда есть</th></tr></thead>
+          <tbody>
+            <tr><td>Индикатор загрузки</td><td><span class="tag">loader</span></td><td>пока загружаются данные менеджера</td></tr>
+            <tr><td>Фото менеджера</td><td><span class="tag">personal_manager_photo_image</span></td><td>если у менеджера есть фото; заглушка без тега</td></tr>
+            <tr><td>Подпись и имя менеджера</td><td><span class="tag">personal_manager_info_text</span> <span class="tag">personal_manager_name_text</span></td><td>если менеджер назначен</td></tr>
+            <tr><td>Поделиться контактом, Позвонить менеджеру</td><td><span class="tag">personal_manager_share_button</span> <span class="tag">personal_manager_call_button</span></td><td>если у менеджера есть телефон; открывают «Поделиться» и набор номера</td></tr>
+            <tr><td>Менеджер не назначен: текст и «Оформить заявку»</td><td><span class="tag">personal_manager_empty_text</span> <span class="tag">personal_manager_apply_for_loan_button</span></td><td>«Оформить заявку» открывает анкету займа</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="screen" data-screen>
+      <div class="screen-head"><h3>О приложении</h3><span class="small">«О приложении» в профиле</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Элемент</th><th>Тег</th><th>Когда есть</th></tr></thead>
+          <tbody>
+            <tr><td>Назад и заголовок</td><td><span class="tag">top_bar_back_button</span> <span class="tag">app_info_title</span></td><td>панель своя, поэтому заголовок — не <span class="tag">top_bar_title</span></td></tr>
+            <tr><td>Версия приложения</td><td><span class="tag">app_info_version_text</span></td><td></td></tr>
+            <tr><td>Пользовательское соглашение</td><td><span class="tag">app_info_agreement_link</span></td><td>открывает документ</td></tr>
+            <tr><td>«Поделиться» и кнопки магазинов и сайта</td><td><span class="tag">app_info_share_title</span> <span class="tag">app_info_share_google_play_button</span> <span class="tag">app_info_share_rustore_button</span> <span class="tag">app_info_share_huawei_button</span> <span class="tag">app_info_share_app_store_button</span> <span class="tag">app_info_share_website_button</span></td><td>только на Android в сборках для RuStore, AppGallery и сайта. Первое нажатие запрашивает доступ к контактам — стандартный диалог <span class="tag">dialog_…</span></td></tr>
+            <tr><td>Выбор контакта: заголовок, список, контакт</td><td><span class="tag">app_info_contacts_dialog_title</span> <span class="tag">app_info_contacts_list</span> <span class="tag">app_info_contacts_item</span></td><td>в отдельном окне, если доступ к контактам есть</td></tr>
+            <tr><td>В контакте: имя и номер</td><td><span class="tag">app_info_contacts_item_name_text</span> <span class="tag">app_info_contacts_item_phone_link</span></td><td>номер открывает SMS со ссылкой на приложение</td></tr>
+            <tr><td>Доступ запрещён: текст и «Перейти»</td><td><span class="tag">app_info_permission_settings_dialog_title</span> <span class="tag">app_info_permission_settings_dialog_confirm_button</span></td><td>если доступ к контактам запрещён насовсем; «Перейти» открывает настройки приложения</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="screen" data-screen>
+      <div class="screen-head"><h3>Логи разработчика</h3><span class="small">меню разработчика → «Журнал логов приложения», только в debug и demo</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Элемент</th><th>Тег</th><th>Когда есть</th></tr></thead>
+          <tbody>
+            <tr><td>Заголовок, Очистить</td><td><span class="tag">dev_logs_title</span> <span class="tag">dev_logs_clear_button</span></td><td>«Назад» — общий <span class="tag">top_bar_back_button</span></td></tr>
+            <tr><td>Показывать логи API-запросов</td><td><span class="tag">dev_logs_api_switch</span></td><td></td></tr>
+            <tr><td>Фильтры по уровню D, I, W, E</td><td><span class="tag">dev_logs_level_d_button</span> <span class="tag">dev_logs_level_i_button</span> <span class="tag">dev_logs_level_w_button</span> <span class="tag">dev_logs_level_e_button</span></td><td></td></tr>
+            <tr><td>Список и строка лога</td><td><span class="tag">dev_logs_list</span> <span class="tag">dev_logs_item</span></td><td>если в журнале есть записи</td></tr>
+            <tr><td>«Журнал пуст»</td><td><span class="tag">dev_logs_empty_text</span></td><td>если записей нет</td></tr>
+            <tr><td>Поделиться</td><td><span class="tag">dev_logs_share_button</span></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="screen" data-screen>
+      <div class="screen-head"><h3>Банковские карты</h3><span class="small">«Мои карты» на главной, во «Всех сервисах» и в профиле</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Элемент</th><th>Тег</th><th>Когда есть</th></tr></thead>
+          <tbody>
+            <tr><td>Прокручиваемый список экрана</td><td><span class="tag">bank_cards_list</span></td><td>на iOS — элемент типа <code>Other</code></td></tr>
+            <tr><td>Карта</td><td><span class="tag">bank_cards_item</span></td><td>по элементу на карту; на iOS — элемент типа <code>Other</code></td></tr>
+            <tr><td>Номер карты</td><td><span class="tag">bank_cards_item_number_text</span></td><td>последние 4 цифры, например «*0078»</td></tr>
+            <tr><td>Меню карты (три точки)</td><td><span class="tag">bank_cards_item_menu_button</span></td><td>если отвязка карт включена на сервере и у клиента больше одной карты; сейчас выключена</td></tr>
+            <tr><td>«Отвязать карту» в меню</td><td><span class="tag">bank_cards_unlink_button</span></td><td>в окне меню; открывает диалог отвязки</td></tr>
+            <tr><td>Диалог отвязки: текст и номер карты</td><td><span class="tag">bank_cards_unlink_dialog_message</span> <span class="tag">bank_cards_unlink_dialog_card_number_text</span></td><td></td></tr>
+            <tr><td>Диалог отвязки: «Отмена» и «Отвязать»</td><td><span class="tag">bank_cards_unlink_dialog_dismiss_button</span> <span class="tag">bank_cards_unlink_dialog_confirm_button</span></td><td>«Отвязать» отвязывает карту — см. «Осторожно»</td></tr>
+            <tr><td>Нет карт: заголовок и текст</td><td><span class="tag">bank_cards_empty_title</span> <span class="tag">bank_cards_empty_text</span></td><td>если у клиента нет карт; текст зависит от того, есть ли клиент в базе</td></tr>
+            <tr><td>Добавить карту</td><td><span class="tag">bank_cards_add_card_button</span></td><td>открывает боевую страницу привязки — см. «Осторожно»</td></tr>
+            <tr><td>Страница добавления карты</td><td><span class="tag">bank_cards_web_view</span></td><td>только Android; на iOS страница открывается в Safari поверх приложения</td></tr>
+            <tr><td>Загрузка страницы</td><td><span class="tag">loader</span></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="screen" data-screen>
+      <div class="screen-head"><h3>Все сервисы</h3><span class="small">кнопка меню сервисов на главной</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Элемент</th><th>Тег</th><th>Когда есть</th></tr></thead>
+          <tbody>
+            <tr><td>Прокручиваемый список экрана</td><td><span class="tag">services_menu_list</span></td><td>на iOS — элемент типа <code>Other</code></td></tr>
+            <tr><td>Заголовки разделов «Сервисы», «Проверки в государственных базах», «Жизнь в России»</td><td><span class="tag">services_menu_services_title</span> <span class="tag">services_menu_government_checks_title</span> <span class="tag">services_menu_russia_life_title</span></td><td>если в разделе есть сервисы</td></tr>
+            <tr><td>Пункты этих разделов</td><td><span class="tag">services_menu_service_item</span> <span class="tag">services_menu_government_check_item</span> <span class="tag">services_menu_russia_life_item</span></td><td>один тег на все пункты раздела, список приходит с сервера; нажатие открывает сервис партнёра</td></tr>
+            <tr><td>Заголовок «Прочее»</td><td><span class="tag">services_menu_other_title</span></td><td></td></tr>
+            <tr><td>Новости, Вакансии</td><td><span class="tag">services_menu_news_button</span> <span class="tag">services_menu_vacancies_button</span></td><td></td></tr>
+            <tr><td>Важная информация, Продукты</td><td><span class="tag">services_menu_important_information_button</span> <span class="tag">services_menu_products_button</span></td><td>скрыты, пока сборка на проверке в магазине приложений</td></tr>
+            <tr><td>Офисы Байбол, Связаться с нами</td><td><span class="tag">services_menu_offices_button</span> <span class="tag">services_menu_contact_us_button</span></td><td></td></tr>
+            <tr><td>Мои договоры, Мои карты</td><td><span class="tag">services_menu_my_contracts_button</span> <span class="tag">services_menu_my_cards_button</span></td><td></td></tr>
+            <tr><td>Персональный менеджер, справка об отсутствии задолженности, настройки приложения</td><td><span class="tag">services_menu_personal_manager_button</span> <span class="tag">services_menu_certificate_button</span> <span class="tag">services_menu_settings_button</span></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="screen" data-screen>
+      <div class="screen-head"><h3>Раздел сервисов</h3><span class="small">заголовок «Сервисы», «Проверка в государственных базах» или «Жизнь в России» на главной</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Элемент</th><th>Тег</th><th>Когда есть</th></tr></thead>
+          <tbody>
+            <tr><td>Прокручиваемый список экрана</td><td><span class="tag">services_list</span></td><td>на iOS — элемент типа <code>Other</code></td></tr>
+            <tr><td>Баннер сервиса</td><td><span class="tag">services_banner_item</span></td><td>один тег на все баннеры; появляется, когда загрузится картинка. На iOS — <code>Button</code> без подписи</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="screen" data-screen>
+      <div class="screen-head"><h3>Новости</h3><span class="small">«Все сервисы» → «Новости»</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Элемент</th><th>Тег</th><th>Когда есть</th></tr></thead>
+          <tbody>
+            <tr><td>Индикатор загрузки</td><td><span class="tag">loader</span></td><td>пока загружается первая страница</td></tr>
+            <tr><td>Список новостей</td><td><span class="tag">site_news_list</span></td><td>на iOS — элемент типа <code>Other</code></td></tr>
+            <tr><td>Новость</td><td><span class="tag">site_news_item</span></td><td>по элементу на новость; открывает новость на сайте в браузере</td></tr>
+            <tr><td>В новости: заголовок, текст, дата</td><td><span class="tag">site_news_item_title</span> <span class="tag">site_news_item_text</span> <span class="tag">site_news_item_date_text</span></td><td></td></tr>
+            <tr><td>Загрузка следующей страницы</td><td><span class="tag">site_news_next_page_loader</span></td><td>в конце списка, пока есть ещё новости</td></tr>
+            <tr><td>«Пока ничего нет»</td><td><span class="tag">site_news_empty_text</span></td><td>если новостей нет</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="screen" data-screen>
+      <div class="screen-head"><h3>Вакансии</h3><span class="small">«Все сервисы» → «Вакансии» или баннер вакансий на главной</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Элемент</th><th>Тег</th><th>Когда есть</th></tr></thead>
+          <tbody>
+            <tr><td>Прокручиваемый список экрана</td><td><span class="tag">vacancies_list</span></td><td>на iOS — элемент типа <code>Other</code></td></tr>
+            <tr><td>Шапка: заголовок и пункты</td><td><span class="tag">vacancies_header_title</span> <span class="tag">vacancies_header_point_text</span></td><td>по элементу на пункт</td></tr>
+            <tr><td>Отправить резюме, Позвонить</td><td><span class="tag">vacancies_send_cv_button</span> <span class="tag">vacancies_call_button</span></td><td>«Отправить резюме» открывает анкету, «Позвонить» — набор номера</td></tr>
+            <tr><td>Город: подпись, поле, выбранный город, варианты</td><td><span class="tag">vacancies_city_title</span> <span class="tag">vacancies_city_dropdown</span> <span class="tag">vacancies_city_dropdown_value</span> <span class="tag">vacancies_city_dropdown_option</span></td><td>варианты — в окне меню</td></tr>
+            <tr><td>Индикатор загрузки вакансий</td><td><span class="tag">loader</span></td><td>при открытии и после смены города</td></tr>
+            <tr><td>Карточка вакансии и должность</td><td><span class="tag">vacancies_item</span> <span class="tag">vacancies_item_title</span></td><td>по карточке на вакансию; нажатие раскрывает описание</td></tr>
+            <tr><td>Описание вакансии / Свернуть описание</td><td><span class="tag">vacancies_item_description_button</span></td><td></td></tr>
+            <tr><td>Обязанности: заголовок и пункт</td><td><span class="tag">vacancies_item_responsibilities_title</span> <span class="tag">vacancies_item_responsibility_text</span></td><td>в раскрытой карточке; по элементу на пункт</td></tr>
+            <tr><td>Требования: заголовок и пункт</td><td><span class="tag">vacancies_item_requirements_title</span> <span class="tag">vacancies_item_requirement_text</span></td><td>в раскрытой карточке; по элементу на пункт</td></tr>
+            <tr><td>Отправить резюме в карточке</td><td><span class="tag">vacancies_item_send_cv_button</span></td><td>открывает анкету с городом и вакансией из карточки</td></tr>
+            <tr><td>«В данный момент вакансий нет»</td><td><span class="tag">vacancies_empty_text</span></td><td>если в городе нет вакансий</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="screen" data-screen>
+      <div class="screen-head"><h3>Анкета на вакансию</h3><span class="small">«Отправить резюме» на экране вакансий или в карточке вакансии</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Элемент</th><th>Тег</th><th>Когда есть</th></tr></thead>
+          <tbody>
+            <tr><td>Прокручиваемый список экрана</td><td><span class="tag">job_form_list</span></td><td>на iOS — элемент типа <code>Other</code></td></tr>
+            <tr><td>Вопросы над городом и вакансией</td><td><span class="tag">job_form_city_title</span> <span class="tag">job_form_vacancy_title</span></td><td>если анкету открыли кнопкой вверху экрана вакансий</td></tr>
+            <tr><td>Город и вакансия</td><td><span class="tag">job_form_city_dropdown</span> <span class="tag">job_form_vacancy_dropdown</span></td><td>поля выбора: значение — <span class="tag">&lt;тег поля&gt;_value</span>, варианты — <span class="tag">&lt;тег поля&gt;_option</span> в окне меню. Если анкету открыли из карточки вакансии, поля только для чтения, значение — в самом поле</td></tr>
+            <tr><td>Имя, дата рождения, телефон, почта, знание языков</td><td><span class="tag">job_form_name_input</span> <span class="tag">job_form_birth_date_input</span> <span class="tag">job_form_phone_input</span> <span class="tag">job_form_email_input</span> <span class="tag">job_form_languages_input</span></td><td>имя и телефон клиента заполнены заранее</td></tr>
+            <tr><td>Гражданство: поле, выбранное значение, варианты</td><td><span class="tag">job_form_citizenship_dropdown</span> <span class="tag">job_form_citizenship_dropdown_value</span> <span class="tag">job_form_citizenship_dropdown_option</span></td><td>варианты — в окне меню</td></tr>
+            <tr><td>Текст под полем</td><td><span class="tag">&lt;тег поля&gt;_error</span>, например <span class="tag">job_form_email_input_error</span></td><td>пока поле пустое — подсказка, ошибку от неё отличает только цвет. Проверяйте текст, а не наличие элемента</td></tr>
+            <tr><td>Заголовок «Наличие разрешительных документов»</td><td><span class="tag">job_form_documents_title</span></td><td></td></tr>
+            <tr><td>Патент, РВП, регистрация, ВНЖ</td><td><span class="tag">job_form_document_patent_radio</span> <span class="tag">job_form_document_temporary_residence_radio</span> <span class="tag">job_form_document_registration_radio</span> <span class="tag">job_form_document_residence_permit_radio</span></td><td>подпись — тег с <code>_text</code> на конце; сразу выбран патент</td></tr>
+            <tr><td>Согласие: чекбокс и текст со ссылкой</td><td><span class="tag">job_form_agreement_checkbox</span> <span class="tag">job_form_agreement_link</span></td><td>текст открывает условия обработки персональных данных</td></tr>
+            <tr><td>Отправить анкету</td><td><span class="tag">job_form_send_button</span></td><td>нажимается всегда: пока анкета не заполнена, подсвечивает ошибки, а заполненную отправляет письмом — см. «Осторожно»</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="screen" data-screen>
+      <div class="screen-head"><h3>Подписание документов по АСП</h3><span class="small">кнопка <span class="tag">home_asp_signing_button</span> на главной или ссылка <code>https://baibol.ru/deeplink/asp_verification</code></span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Элемент</th><th>Тег</th><th>Когда есть</th></tr></thead>
+          <tbody>
+            <tr><td>Формирование документов: анимация на весь экран</td><td><span class="tag">asp_verification_creating_documents_loader</span></td><td>при открытии экрана, пока формируются документы</td></tr>
+            <tr><td>Номер телефона в тексте «На ваш номер … отправлено СМС с кодом»</td><td><span class="tag">asp_verification_phone_text</span></td><td>если есть что подписать</td></tr>
+            <tr><td>Поле кода</td><td><span class="tag">asp_verification_code_input</span></td><td>если есть что подписать; код проверяется сам после 4 цифр — см. «Осторожно»</td></tr>
+            <tr><td>Ошибка</td><td><span class="tag">asp_verification_error</span></td><td>после неверного кода</td></tr>
+            <tr><td>Проверка кода: анимация</td><td><span class="tag">asp_verification_progress_loader</span></td><td>пока код проверяется</td></tr>
+            <tr><td>«Вы подписываете:» и ссылки на документы</td><td><span class="tag">asp_verification_documents_title</span> <span class="tag">asp_verification_document_link</span></td><td>по ссылке на документ, ссылка открывает документ</td></tr>
+            <tr><td>Заглушка «Нет документов для подписания»: блок, заголовок, текст</td><td><span class="tag">asp_verification_empty</span> <span class="tag">asp_verification_empty_title</span> <span class="tag">asp_verification_empty_text</span></td><td>вместо поля кода, если подписывать нечего — например, экран открыли по старой ссылке</td></tr>
+            <tr><td>На главную</td><td><span class="tag">asp_verification_home_button</span></td><td>на заглушке; открывает главную</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="screen" data-screen>
+      <div class="screen-head"><h3>Документы</h3><span class="small">«Мои документы» в профиле</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Элемент</th><th>Тег</th><th>Когда есть</th></tr></thead>
+          <tbody>
+            <tr><td>Индикатор загрузки</td><td><span class="tag">loader</span></td><td>пока загружается список</td></tr>
+            <tr><td>Онбординг: список и заголовки шагов</td><td><span class="tag">identity_documents_onboarding_list</span> <span class="tag">identity_documents_onboarding_step_title</span></td><td>у клиента без документов</td></tr>
+            <tr><td>Онбординг: согласие и его текст, «Продолжить»</td><td><span class="tag">identity_documents_onboarding_agreement_checkbox</span> <span class="tag">identity_documents_onboarding_agreement_checkbox_text</span> <span class="tag">identity_documents_onboarding_continue_button</span></td><td>«Продолжить» активна после согласия</td></tr>
+            <tr><td>Прокручиваемый список экрана</td><td><span class="tag">identity_documents_list</span></td><td>на iOS — элемент типа <code>Other</code></td></tr>
+            <tr><td>Добавленный документ</td><td><span class="tag">identity_documents_document_item</span></td><td>по строке на документ. Если не хватает фото, строка нажимается и открывает дозагрузку; на iOS такая строка — <code>Button</code>, остальные — <code>Other</code></td></tr>
+            <tr><td>Загруженное фото с паспортом</td><td><span class="tag">identity_documents_photo_with_passport_item</span></td><td></td></tr>
+            <tr><td>Документ, который нужно добавить</td><td><span class="tag">identity_documents_add_document_card</span></td><td>по карточке на требование, пока не добавлены все обязательные документы</td></tr>
+            <tr><td>Добавить фото с паспортом</td><td><span class="tag">identity_documents_add_photo_with_passport_card</span></td><td>когда обязательные документы добавлены, а фото ещё нет</td></tr>
+            <tr><td>В строках и карточках: название, подпись, «Добавьте недостающие фото»</td><td><span class="tag">identity_documents_item_title</span> <span class="tag">identity_documents_item_subtitle</span> <span class="tag">identity_documents_item_missing_photo_text</span></td><td>подпись — у карточек: «добавить» или варианты документа</td></tr>
+            <tr><td>Подсказка «Загрузите документ…»</td><td><span class="tag">identity_documents_upload_hint_text</span></td><td>пока не добавлены все обязательные документы</td></tr>
+            <tr><td>«Добавлены все основные документы»: заголовок и текст</td><td><span class="tag">identity_documents_all_added_title</span> <span class="tag">identity_documents_all_added_text</span></td><td>когда добавлено всё, включая фото с паспортом</td></tr>
+            <tr><td>Добавить дополнительный документ</td><td><span class="tag">identity_documents_add_additional_button</span></td><td>открывает шторку выбора вида документа</td></tr>
+            <tr><td>Вид документа в шторке выбора</td><td><span class="tag">identity_documents_picker_item</span></td><td>в окне шторки, по строке на вид</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="screen" data-screen>
+      <div class="screen-head"><h3>Добавление документа</h3><span class="small">карточка требования, строка документа с недостающими фото или вид в шторке дополнительного документа</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Элемент</th><th>Тег</th><th>Когда есть</th></tr></thead>
+          <tbody>
+            <tr><td>Заголовок «Проверьте правильность введенных данных»</td><td><span class="tag">add_identity_document_title</span></td><td></td></tr>
+            <tr><td>Вид документа и заголовок «Фото документа»</td><td><span class="tag">add_identity_document_kind_title</span> <span class="tag">add_identity_document_photos_title</span></td><td></td></tr>
+            <tr><td>Реквизиты: серия, номер, дата выдачи, кем выдан, код подразделения, дата окончания</td><td><span class="tag">add_identity_document_series_input</span> <span class="tag">add_identity_document_number_input</span> <span class="tag">add_identity_document_issue_date_input</span> <span class="tag">add_identity_document_issued_by_input</span> <span class="tag">add_identity_document_subdivision_code_input</span> <span class="tag">add_identity_document_end_date_input</span></td><td>набор полей зависит от вида документа; у добавленного документа поля только для чтения. У патента поле «Кем выдан» подписано «Регион действия», тег прежний</td></tr>
+            <tr><td>Текст ошибки под полем</td><td><span class="tag">&lt;тег поля&gt;_error</span>, например <span class="tag">add_identity_document_series_input_error</span></td><td>появляется вместе с ошибкой, до неё элемента нет. Проверяйте текст</td></tr>
+            <tr><td>Регион действия у патента: строка подсказки <span class="chip next">3.0.1.0</span></td><td><span class="tag">add_identity_document_issued_by_input_option</span></td><td>в окне меню у поля <span class="tag">add_identity_document_issued_by_input</span>, один тег на все строки. Список открывается по нажатию на поле и сужается при вводе; если справочник регионов не загрузился, строк нет</td></tr>
+            <tr><td>Вид фото без снимка</td><td><span class="tag">add_identity_document_missing_photo_item</span></td><td>нажатие открывает «Откуда взять фото?»</td></tr>
+            <tr><td>Снимок на устройстве и кнопка удаления</td><td><span class="tag">add_identity_document_added_photo_item</span> <span class="tag">add_identity_document_photo_delete_button</span></td><td>снимок ещё не отправлен и пропадает, если уйти с экрана</td></tr>
+            <tr><td>Вид фото, снимок которого уже на сервере</td><td><span class="tag">add_identity_document_sent_photo_item</span></td><td>после сохранения, если часть снимков не дошла</td></tr>
+            <tr><td>Название вида фото</td><td><span class="tag">add_identity_document_file_kind_text</span></td><td>в строках списка и в шторке вида фото</td></tr>
+            <tr><td>Добавить фото</td><td><span class="tag">add_identity_document_add_photo_button</span></td><td>когда у каждого вида есть снимок; открывает шторку вида фото</td></tr>
+            <tr><td>Вид фото в шторке «Добавить фото»</td><td><span class="tag">add_identity_document_file_kind_item</span></td><td>по строке на вид</td></tr>
+            <tr><td>Сохранить документ</td><td><span class="tag">add_identity_document_save_button</span></td><td>нажимается всегда: пока форма не готова, подсвечивает ошибки, а готовую форму отправляет — см. «Осторожно»</td></tr>
+            <tr><td>Требования к фото в шторке «Откуда взять фото?»</td><td><span class="tag">add_identity_document_photo_requirements_title</span> <span class="tag">add_identity_document_photo_requirements_text</span></td><td>остальное в шторке — общие <span class="tag">photo_source_…</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="screen" data-screen>
+      <div class="screen-head"><h3>Съёмка документа</h3><span class="small">«Сделать фото» в шторке «Откуда взять фото?»</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Элемент</th><th>Тег</th><th>Когда есть</th></tr></thead>
+          <tbody>
+            <tr><td>Закрыть</td><td><span class="tag">document_camera_close_button</span></td><td></td></tr>
+            <tr><td>Заголовок и подсказка</td><td><span class="tag">document_camera_title</span> <span class="tag">document_camera_hint_text</span></td><td>на инструкции — вид документа, на съёмке — что снять</td></tr>
+            <tr><td>Пример снимка в рамке</td><td><span class="tag">document_camera_example_image</span></td><td>на шаге инструкции, у видов фото с рамкой</td></tr>
+            <tr><td>Сфотографировать</td><td><span class="tag">document_camera_take_photo_button</span></td><td>на шаге инструкции</td></tr>
+            <tr><td>Кнопка съёмки</td><td><span class="tag">document_camera_capture_button</span></td><td>видоискатель без тега — см. «Что не покрыто»</td></tr>
+            <tr><td>Снимок</td><td><span class="tag">document_camera_photo_image</span></td><td>на подтверждении</td></tr>
+            <tr><td>Переснять, Подтвердить</td><td><span class="tag">document_camera_retake_button</span> <span class="tag">document_camera_confirm_button</span></td><td>«Подтвердить» сохраняет снимок на устройстве и возвращает к форме, на сервер ничего не уходит</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="screen" data-screen>
+      <div class="screen-head"><h3>Фото с паспортом</h3><span class="small">карточка «Фото с паспортом/ID-картой» в «Документах»</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Элемент</th><th>Тег</th><th>Когда есть</th></tr></thead>
+          <tbody>
+            <tr><td>Закрыть</td><td><span class="tag">photo_with_passport_close_button</span></td><td>на всех шагах</td></tr>
+            <tr><td>Инструкция</td><td><span class="tag">photo_with_passport_instruction_text</span></td><td></td></tr>
+            <tr><td>Сфотографировать</td><td><span class="tag">photo_with_passport_take_photo_button</span></td><td></td></tr>
+            <tr><td>Кнопка съёмки</td><td><span class="tag">photo_with_passport_capture_button</span></td><td>снимает фронтальная камера</td></tr>
+            <tr><td>Снимок</td><td><span class="tag">photo_with_passport_photo_image</span></td><td>на подтверждении</td></tr>
+            <tr><td>Переснять, Подтвердить</td><td><span class="tag">photo_with_passport_retake_button</span> <span class="tag">photo_with_passport_confirm_button</span></td><td>«Подтвердить» отправляет фото на сервер — см. «Осторожно»</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="screen" data-screen>
+      <div class="screen-head"><h3>Отправка снимков</h3><span class="small">после «Сохранить документ» и «Подтвердить» на фото с паспортом</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Элемент</th><th>Тег</th><th>Когда есть</th></tr></thead>
+          <tbody>
+            <tr><td>Диалог и текст «Отправляем фото на сервер»</td><td><span class="tag">sending_photos_loader</span> <span class="tag">sending_photos_text</span></td><td>пока снимки отправляются; закрыть диалог нельзя</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="screen" data-screen>
+      <div class="screen-head"><h3>ИИ-чат</h3><span class="small">кнопка <span class="tag">bottom_bar_ai_chat_button</span> в нижнем меню. Уже при открытии создаётся чат на боевом сервисе — см. «Осторожно»</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Элемент</th><th>Тег</th><th>Когда есть</th></tr></thead>
+          <tbody>
+            <tr><td>Назад, «Чат с Сабиной» и подзаголовок</td><td><span class="tag">top_bar_back_button</span> <span class="tag">ai_chat_title</span> <span class="tag">ai_chat_subtitle</span></td><td>панель своя, поэтому заголовок — не <span class="tag">top_bar_title</span></td></tr>
+            <tr><td>Индикатор загрузки</td><td><span class="tag">loader</span></td><td>на месте строки ввода, пока создаётся чат</td></tr>
+            <tr><td>Приветствие: заголовок и текст</td><td><span class="tag">ai_chat_welcome_title</span> <span class="tag">ai_chat_welcome_text</span></td><td>в новом чате. Текст печатается по буквам и по кругу меняет язык — проверяйте наличие, а не текст</td></tr>
+            <tr><td>«Быстрые вопросы» и лента вопросов</td><td><span class="tag">ai_chat_quick_questions_title</span> <span class="tag">ai_chat_quick_questions_list</span></td><td>в новом чате</td></tr>
+            <tr><td>Быстрый вопрос</td><td><span class="tag">ai_chat_quick_question_item</span></td><td>один тег на все. Лента всё время прокручивается сама, вопросы в ней повторяются. Нажатие сразу отправляет вопрос боту</td></tr>
+            <tr><td>Оговорка «*информация предоставляется ботом…»</td><td><span class="tag">ai_chat_disclaimer_text</span></td><td>в новом чате</td></tr>
+            <tr><td>Ошибка: заголовок, текст и «Повторить»</td><td><span class="tag">ai_chat_error_title</span> <span class="tag">ai_chat_error_text</span> <span class="tag">ai_chat_retry_button</span></td><td>если чат не создался или ответ не пришёл; проще всего получить, открыв чат без сети</td></tr>
+            <tr><td>Лента сообщений</td><td><span class="tag">ai_chat_messages_list</span></td><td>после первого сообщения</td></tr>
+            <tr><td>Сообщение клиента и его текст</td><td><span class="tag">ai_chat_user_message_item</span> <span class="tag">ai_chat_user_message_text</span></td><td>один тег на все сообщения</td></tr>
+            <tr><td>Ответ бота: сообщение, подпись «Бот-помощник Сабина» и текст</td><td><span class="tag">ai_chat_bot_message_item</span> <span class="tag">ai_chat_bot_name_text</span> <span class="tag">ai_chat_bot_message_text</span></td><td>один тег на все ответы. Где лежит текст ответа — см. <a href="#platforms">«Различия платформ»</a></td></tr>
+            <tr><td>Бот печатает</td><td><span class="tag">ai_chat_bot_writing_loader</span></td><td>внутри <span class="tag">ai_chat_bot_message_item</span>, пока ответ не пришёл</td></tr>
+            <tr><td>Прокрутить вниз</td><td><span class="tag">ai_chat_scroll_down_button</span></td><td>когда последний ответ за экраном и ленту листают вниз</td></tr>
+            <tr><td>Поле сообщения и «Отправить»</td><td><span class="tag">ai_chat_message_input</span> <span class="tag">ai_chat_send_button</span></td><td>«Отправить» выключена, пока поле пустое, бот печатает или показана ошибка</td></tr>
+            <tr><td>Сохранить историю, скопировать и поделиться ответом</td><td><span class="tag">ai_chat_save_history_button</span> <span class="tag">ai_chat_copy_button</span> <span class="tag">ai_chat_share_button</span></td><td>только в debug и demo с «Тестовыми функциями ИИ-чата» в меню разработчика: тогда вместо нового чата открывается история чата по номеру телефона. Копирование и «Поделиться» — под каждым ответом бота</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">Лента быстрых вопросов движется, поэтому ищите вопрос прямо перед нажатием: найденный заранее элемент к моменту нажатия уедет, и нажатие попадёт в соседний вопрос. Если на стартовом экране UiAutomator2 подолгу ждёт, пока приложение успокоится, уменьшите настройку драйвера <code>waitForIdleTimeout</code>.</p>
+    </div>
+
+    <div class="screen" data-screen>
+      <h3>Поиск</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Элемент</th><th>Тег</th><th>Когда есть</th></tr></thead>
+          <tbody>
+            <tr><td>Поле поиска</td><td><span class="tag">search_input</span></td><td>фокус ставится сам при открытии</td></tr>
+            <tr><td>Список результатов</td><td><span class="tag">search_list</span></td><td></td></tr>
+            <tr><td>Заголовок группы: «Часто ищут», «Байбол», «Новости»</td><td><span class="tag">search_group_title</span></td><td></td></tr>
+            <tr><td>Результат</td><td><span class="tag">search_result_item</span></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="screen" data-screen>
+      <h3>Уведомления</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Элемент</th><th>Тег</th><th>Когда есть</th></tr></thead>
+          <tbody>
+            <tr><td>Список уведомлений</td><td><span class="tag">notifications_list</span></td><td></td></tr>
+            <tr><td>Дата над группой</td><td><span class="tag">notifications_date_text</span></td><td></td></tr>
+            <tr><td>Уведомление</td><td><span class="tag">notifications_item</span></td><td>нажимается, если в нём есть ссылка</td></tr>
+            <tr><td>Заголовок, текст, время</td><td><span class="tag">notifications_item_title</span> <span class="tag">notifications_item_text</span> <span class="tag">notifications_item_time_text</span></td><td></td></tr>
+            <tr><td>«Пока ничего нет»</td><td><span class="tag">notifications_empty_text</span></td><td>если уведомлений нет</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="screen" data-screen>
+      <div class="screen-head"><h3>Редкие окна</h3><span class="small">появляются по настройкам с сервера</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Элемент</th><th>Тег</th><th>Когда есть</th></tr></thead>
+          <tbody>
+            <tr><td>Обновите приложение</td><td><span class="tag">force_update_title</span> <span class="tag">force_update_message</span> <span class="tag">force_update_button</span> <span class="tag">force_update_later_button</span></td><td>«Позже» — только у необязательного обновления</td></tr>
+            <tr><td>Новость от сервера</td><td><span class="tag">remote_news_title</span> <span class="tag">remote_news_text</span> <span class="tag">remote_news_confirm_button</span></td><td></td></tr>
+            <tr><td>Оценка приложения: первый шаг</td><td><span class="tag">app_review_title</span> <span class="tag">app_review_text</span> <span class="tag">app_review_no_button</span> <span class="tag">app_review_yes_button</span> <span class="tag">app_review_later_button</span></td><td></td></tr>
+            <tr><td>Оценка приложения: отзыв</td><td><span class="tag">app_review_feedback_input</span> <span class="tag">app_review_send_button</span></td><td>после «Нет»</td></tr>
+            <tr><td>Закрыть оценку приложения</td><td><span class="tag">app_review_close_button</span></td><td>прозрачная область над шторкой</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="platforms">
+    <h2>Где платформы различаются</h2>
+    <p>Теги находятся на обеих платформах, но элементы в дереве называются по-разному. Проверено с 28 сентября по 9 октября на Android 16 и iOS 26.5 в сборке demo.</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Элемент</th><th>Android</th><th>iOS</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Кнопка, в том числе иконка и карточка, которую можно нажать</td><td>View с <code>clickable=true</code></td><td><code>Button</code>, в <code>label</code> — тексты внутри</td></tr>
+          <tr><td>Кнопка-картинка без текста: баннеры (<span class="tag">services_banner_item</span>, <span class="tag">home_service_banner_item</span>)</td><td>View с <code>clickable=true</code></td><td><code>Button</code> без <code>label</code></td></tr>
+          <tr><td>Текст, в том числе внутри карточки или кнопки</td><td><code>TextView</code></td><td><code>StaticText</code></td></tr>
+          <tr><td>Поле ввода</td><td><code>EditText</code></td><td><code>TextView</code>, введённый текст — в <code>value</code>; у полей документа в <code>label</code> ещё и текст ошибки</td></tr>
+          <tr><td>Чекбокс</td><td><code>CheckBox</code>, состояние — в <code>checked</code></td><td><code>Button</code></td></tr>
+          <tr><td>Слайдер суммы и срока</td><td><code>SeekBar</code></td><td><code>Other</code>, значение — в <code>value</code></td></tr>
+          <tr><td>Полоса выплаты на карточке договора (<span class="tag">loan_card_balance_progress</span>)</td><td><code>ProgressBar</code>. Доля выплаты от 0 до 1 лежит в диапазоне элемента, а не в <code>text</code>. Мы видели её в инструменте осмотра дерева; отдаёт ли её ваш драйвер, проверьте в Appium Inspector и напишите, если не отдаёт</td><td><code>Other</code>, процент — в <code>value</code>, например «54%»</td></tr>
+          <tr><td>Радиокнопка (выбор темы)</td><td><code>RadioButton</code>, выбранная — <code>checked=true</code></td><td><code>Button</code>, выбранная — <code>selected=true</code></td></tr>
+          <tr><td>Переключатель</td><td>View с <code>checked</code></td><td><code>Switch</code></td></tr>
+          <tr><td>PDF-документ, карта офисов (<span class="tag">document_pdf_view</span>, <span class="tag">offices_map</span>)</td><td>View, содержимое без тегов</td><td><code>Other</code>, содержимое без тегов</td></tr>
+          <tr><td>Список или контейнер (<span class="tag">home_list</span>, <span class="tag">search_list</span>, <span class="tag">sign_in_web_view</span>)</td><td>View</td><td><code>Other</code></td></tr>
+          <tr><td>Текст ответа ИИ-чата (<span class="tag">ai_chat_bot_message_text</span>)</td><td>View, весь текст ответа — в дочернем <code>TextView</code> без тега</td><td><code>Other</code>, внутри — <code>StaticText</code> на каждый абзац</td></tr>
+          <tr><td>Диалоги, шторки, выпадающие меню</td><td class="yes">✓ видны</td><td class="yes">✓ видны</td></tr>
+          <tr><td>Поля страницы входа (веб)</td><td class="yes">✓ видны по id страницы</td><td class="yes">✓ видны без id — по типу и <code>label</code></td></tr>
+          <tr><td>Точки ввода PIN-кода</td><td class="no">✕ без тега</td><td class="no">✕ без тега</td></tr>
+          <tr><td>Элементы списка за пределами экрана</td><td class="part">нет в дереве, прокрутите список</td><td class="part">нет в дереве, прокрутите список</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Во время перехода между экранами старый и новый экран какое-то время видны вместе, поэтому общий тег вроде <span class="tag">top_bar_back_button</span> может найтись дважды. Дождитесь окончания анимации.</p>
+  </section>
+
+  <section id="uncovered">
+    <h2>Что тегами не покрыть</h2>
+    <p>Часть экранов рисует не наш код, а веб-страница, сторонний SDK или система. Туда наши теги не попадут.</p>
+    <div class="gaps">
+      <div class="gap-item">
+        <div class="kind"><span class="chip">Веб-страница</span></div>
+        <div class="body">
+          <h3>Вход: телефон, код подтверждения, капча</h3>
+          <p>Это страница сервиса авторизации внутри <span class="tag">sign_in_web_view</span>, наших тегов в ней нет. Её элементы видны в обычном дереве элементов, переключать контекст не нужно.</p>
+          <p>На Android элементы ищутся по id со страницы: например, поле телефона — <code>phone</code>. Контекст WEBVIEW тоже доступен, в сборках debug и demo.</p>
+          <p>На iOS id со страницы не приходят, ищите по типу и подписи: поле телефона — <code>TextField</code> с <code>label</code> «Номер телефона», кнопка — <code>Button</code> «Продолжить». Если нужен контекст WEBVIEW и на iOS — напишите, включим.</p>
+          <p>Капчу автотест не пройдёт. Для автотестов нужен номер или стенд без капчи — обсудим с бэкендом.</p>
+        </div>
+      </div>
+      <div class="gap-item">
+        <div class="kind"><span class="chip">Веб-страница</span></div>
+        <div class="body">
+          <h3>Оплата и привязка карты</h3>
+          <p>Платёжная страница. На Android открывается в WebView, на iOS — в Safari поверх приложения (SFSafariViewController). На Android тег есть у контейнера: <span class="tag">payment_web_view</span>, <span class="tag">bank_cards_web_view</span>; на iOS тега нет.</p>
+        </div>
+      </div>
+      <div class="gap-item">
+        <div class="kind"><span class="chip">Сторонний SDK</span></div>
+        <div class="body">
+          <h3>Чат поддержки, камера для документов, метки на карте офисов, страницы PDF</h3>
+          <p>Это рисуют сторонние SDK и система, наших тегов внутри не будет. У карты и PDF тег есть у контейнера: <span class="tag">offices_map</span>, <span class="tag">document_pdf_view</span>. Остальное ищите по собственным атрибутам элементов.</p>
+          <p>У видоискателя камеры тега нет: что камера готова, видно по кнопке съёмки <span class="tag">document_camera_capture_button</span> или <span class="tag">photo_with_passport_capture_button</span>. На iOS-симуляторе камеры нет, снимок не сделать — добавляйте фото через «Выбрать из галереи».</p>
+        </div>
+      </div>
+      <div class="gap-item">
+        <div class="kind"><span class="chip">Система</span></div>
+        <div class="body">
+          <h3>Системные окна</h3>
+          <p>Запросы разрешений, биометрия, выбор фото, «Поделиться», обновление из магазина.</p>
+        </div>
+      </div>
+      <div class="gap-item">
+        <div class="kind"><span class="chip">Поведение</span></div>
+        <div class="body">
+          <h3>Карусель баннеров на главной</h3>
+          <p>Листается сама каждые 8 секунд и по кругу. Учитывайте это в проверках баннеров.</p>
+        </div>
+      </div>
+      <div class="gap-item">
+        <div class="kind"><span class="platform android">Android</span></div>
+        <div class="body">
+          <h3>Диалоги при первом запуске</h3>
+          <p>Может появиться диалог с инструкцией про уведомления и запрос разрешения на звонки для автозаполнения кода. У обоих теги стандартного диалога: <span class="tag">dialog_confirm_button</span>, <span class="tag">dialog_dismiss_button</span>.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="rollout">
+    <h2>Порядок внедрения</h2>
+    <ol class="steps">
+      <li>
+        <div class="body">
+          <div class="title"><h3>Пилот</h3><span class="chip ok">В релизной ветке</span></div>
+          <p>Верхняя панель, снекбар, диалоги и шторки на всех экранах, нижнее меню. Экраны: вход, PIN-код, главная с карточками займов, поиск, уведомления. Проверено на Android и iOS в сборке demo.</p>
+          <p>30 сентября пилот и все экраны из списка тегов влиты в релизную ветку <code>Release-candidate-3.0.0.0-(kmp)</code>.</p>
+        </div>
+      </li>
+      <li>
+        <div class="body">
+          <div class="title"><h3>Ваши первые тесты</h3><span class="chip next">Можно начинать</span></div>
+          <p>Теги есть во всех сборках из релизной ветки от 30 сентября и новее: debug, demo и release, на Android и iOS. Release для Android раздаёт CI через Firebase App Distribution — подойдёт версия 3.0.0.0 с датой 20260930 или более поздней в названии, например <code>3.0.0.0-Google-20260930-…</code>.</p>
+          <p>Напишите 1–2 теста и расскажите, удобны ли имена и всего ли хватает. После этого закрепим правила. Перед первым прогоном прочитайте <a href="#caution">«Осторожно»</a>: release работает с боевым бэкендом.</p>
+        </div>
+      </li>
+      <li>
+        <div class="body">
+          <div class="title"><h3>Остальные экраны по потокам</h3><span class="chip ok">Готово</span></div>
+          <p>Займы: анкета, продукты, экран продукта, «Договоры» и выбор способа оплаты — в списке тегов выше, проверены на Android и iOS. Предодобренный займ, изменение условий, заявка на займ и её документы, экран кода из SMS размечены, но на demo сейчас нет клиента с такими данными — добавим в список после проверки.</p>
+          <p>Оплата: экраны «Оплатить» и «Внесение платежа» — в списке тегов выше, проверены на Android и iOS.</p>
+          <p>Договоры: экран договора, история платежей, справка об отсутствии задолженности и просмотр PDF — в списке тегов выше, проверены на Android и iOS. Период охлаждения (таймер, «Отказаться», документы по договору) и просмотр документа-фото размечены, но на demo сейчас нет таких данных.</p>
+          <p>Профиль: профиль и его диалоги, фото профиля и кадрирование, офисы, «О компании», «Связаться с нами», «Информация для клиента», логи разработчика — в списке тегов выше, проверены на Android и iOS. Не проверяли удаление фото и выбор приложения для маршрута на iOS.</p>
+          <p>Карты, сервисы и подпись по АСП: «Банковские карты», «Все сервисы», раздел сервисов и подписание документов — в списке тегов выше, проверены на Android и iOS. Не проверяли меню карты и диалог отвязки (отвязка сейчас выключена на сервере), экран без карт, ссылки на документы и ошибку на экране подписания — на demo нет таких данных. Когда подписывать нечего, экран подписания показывает заглушку «Нет документов для подписания» — проверена на Android и iOS; телефон и поле кода есть только у клиента, которому есть что подписать.</p>
+          <p>Документы личности: «Документы», добавление документа и съёмка документа — в списке тегов выше, проверены на Android и iOS. Онбординг, карточки требований, фото с паспортом и диалог отправки размечены, но на demo нет клиента с такими данными, а для диалога отправки нужно сохранить документ.</p>
+          <p>Экран результата, вакансии и анкета на вакансию, новости, персональный менеджер и «О приложении» — в списке тегов выше, проверены на Android и iOS. Экран результата можно открыть без настоящей операции из меню разработчика в сборках debug и demo: в анкете на вакансию — успех и две ошибки, в анкете займа и на экране продукта — ошибка и успех, в «Банковских картах» — успешная привязка. Не проверяли «Вернуться к оплате» и «Назад» после ошибки отказа от займа — их нет в меню разработчика, фото менеджера и экран без менеджера, пустые списки вакансий и новостей — на demo нет таких данных, и строки контактов — на тестовом телефоне не было контактов.</p>
+          <p>ИИ-чат: стартовый экран с быстрыми вопросами, экран ошибки, лента сообщений, строка ввода и кнопки тестовых функций — в списке тегов выше, проверены на Android и iOS. Не проверяли анимацию «бот печатает» на Android и экран ошибки на iOS. 30 сентября ИИ-чат влит в релизную ветку: его теги есть в сборках, у которых в названии версии дата и время 20260930-1837 или позже (время — UTC). С ИИ-чатом размечены все запланированные экраны; экраны, для которых на demo нет данных, добавим в список после проверки.</p>
+        </div>
+      </li>
+      <li>
+        <div class="body">
+          <div class="title"><h3>Дополнение: карточки займов</h3><span class="chip ok">В релизной ветке</span></div>
+          <p>По вашему списку добавили теги на карточки договоров и заявок: остаток и полоса выплаты, «Платёж внесён», дата ближайшего платежа, просрочка, закрытие, срок, сумма, таймер и подсказки заявки. Они в <a href="#registry">списке тегов</a>, раздел «Карточки займов», с пометкой «3.0.1.0».</p>
+          <p>Два имени отличаются от вашего списка. Вместо <code>loan_card_next_payment_text</code> — <span class="tag">loan_card_next_payment_date_text</span>: отдельного текста с суммой на карточке нет, сумма платежа — в тексте кнопки <span class="tag">loan_contract_pay_button</span>. Вместо <code>loan_card_close_sum_text</code> — <span class="tag">loan_card_close_planned_text</span>: в строке «Внесите … для закрытия договора до …» сумма и дата — один текст, по отдельности их не взять. <span class="tag">loan_card_close_date_text</span> — дата у уже закрытого договора. Сверх списка добавили <span class="tag">loan_card_overdue_date_text</span> — дату пропущенного платежа.</p>
+          <p>На экране договора этих тегов не будет: там своя карточка с тегами <code>contract_details_…</code>, см. «Договор».</p>
+          <p>Проверено на Android и iOS: остаток, полоса выплаты и «Платёж внесён» у активного договора. Срок и сумма онлайн-заявки проверены на Android. Ближайший платёж, просрочка, закрытие и карточка заявки размечены, но на demo нет клиента с такими данными.</p>
+          <p>9 октября дополнение влито в релизную ветку <code>Release-candidate-3.0.1.0</code>. Теги есть во всех её сборках, собранных после этого: у сборок из CI в названии версии дата и время 20261009-1019 или позже (время — UTC), например <code>3.0.1.0-Google-20261009-…</code>. В сборках 3.0.0.0 этих тегов нет.</p>
+        </div>
+      </li>
+      <li>
+        <div class="body">
+          <div class="title"><h3>Дополнение: главная и кнопка поиска</h3><span class="chip ok">В релизных ветках</span></div>
+          <p>По отчёту вашего ИИ-агента добавили теги ряда карточек займов <span class="tag">home_loan_cards_list</span> и стрелок у заголовков групп баннеров <code>home_&lt;группа&gt;_banners_arrow_button</code>. Они в <a href="#registry">списке тегов</a>, раздел «Главная», с пометкой «3.0.1.0».</p>
+          <p>Исправили кнопку поиска в шапке. У круга вокруг иконки был обработчик уведомлений. Пальцем это почти незаметно, потому что нажатие перехватывает иконка, но TalkBack, VoiceOver и Appium-клик по кругу открывали уведомления. Теперь круг открывает поиск, и тег <span class="tag">home_search_button</span> стоит на нём. Имя тега прежнее, элемент стал крупнее: весь круг вместо иконки.</p>
+          <p>Теги карточек займов агент не нашёл, потому что смотрел код 3.0.0.0, а они есть только в 3.0.1.0. Два имени в его списке устарели: <code>loan_card_next_payment_text</code> и <code>loan_card_close_sum_text</code>. Правильные — <span class="tag">loan_card_next_payment_date_text</span> и <span class="tag">loan_card_close_planned_text</span>, см. шаг выше.</p>
+          <p>14 октября всё влито. Теги главной есть в сборках 3.0.1.0 с датой и временем 20261014-0816 или позже в названии версии (время — UTC). Исправление кнопки поиска есть и в 3.0.1.0, и в 3.0.0.0, в сборках с той же даты и времени. На устройстве этот блок мы не проверяли: только сборка, статический анализ и тесты. Если тег не найдётся, напишите.</p>
+        </div>
+      </li>
+      <li>
+        <div class="body">
+          <div class="title"><h3>Дополнение: регион действия у патента</h3><span class="chip ok">В релизной ветке</span></div>
+          <p>У документа «Патент» поле «Кем выдан» теперь подписано «Регион действия». При добавлении патента по нажатию на поле открывается список субъектов РФ. Тег поля прежний, <span class="tag">add_identity_document_issued_by_input</span>. Строки списка получили общий тег <span class="tag">add_identity_document_issued_by_input_option</span>: он в <a href="#registry">списке тегов</a>, раздел «Добавление документа», с пометкой «3.0.1.0».</p>
+          <p>Выпадающие списки подсказок теперь шириной ровно с поле. Раньше они были шире и прижимались к правому краю экрана. Это касается и поля «Город» в анкете займа. Имена тегов не менялись.</p>
+          <p>Проверено на Android в сборке demo, на iOS тег ещё не проверяли. 3 ноября влито в релизную ветку <code>Release-candidate-3.0.1.0</code>: тег есть в её сборках, собранных после этого. В сборках 3.0.0.0 его нет.</p>
+        </div>
+      </li>
+      <li>
+        <div class="body">
+          <div class="title"><h3>Дополнение: подтверждение даты рождения при входе</h3><span class="chip ok">В релизной ветке</span></div>
+          <p>После кода со страницы входа сервер может попросить клиента подтвердить дату рождения — тогда до экрана «Задайте код» открывается ввод даты. Теги — в <a href="#registry">списке тегов</a>, раздел «Вход: подтверждение даты рождения», с пометкой «3.0.1.0».</p>
+          <p>Там же изменилась страница входа: верхней панели больше нет, «Назад» — красная стрелка поверх страницы. Тег стрелки прежний, <span class="tag">top_bar_back_button</span>, так что тесты, которые нажимают «Назад» на странице входа, менять не нужно.</p>
+          <p>Как попасть на экран даты: дату просит сервер, если клиент давно не входил. На demo для этого дату последнего входа клиента в 1С сдвигают назад больше чем на 2 дня. У клиента 2 попытки, счётчик хранится на устройстве и сбрасывается при выходе из аккаунта. Верная дата снимает требование: чтобы снова увидеть экран, дату последнего входа нужно сдвинуть ещё раз. Неверная дата требование не снимает.</p>
+          <p>Проверено на Android и iOS в сборке demo: ввод даты, ошибки под полем, экран расхождения с одной и без попыток, выход, стрелка на странице входа. Снекбар ошибки запроса проверен на Android. Экран «Не удалось войти» на demo не получить, его теги проверены только по коду.</p>
+          <p>13 ноября влито в релизную ветку <code>Release-candidate-3.0.1.0</code>: теги и стрелка на странице входа есть в её сборках, собранных после этого. В сборках 3.0.0.0 их нет.</p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <footer>
+    <div>Обновлено 13 ноября 2026. Источники:</div>
+    <ul>
+      <li><a href="https://github.com/appium/appium-uiautomator2-driver" target="_blank" rel="noopener">Драйвер UiAutomator2: disableIdLocatorAutocompletion, mapTestTagToResourceId</a></li>
+      <li><a href="https://kotlinlang.org/docs/multiplatform/compose-ios-accessibility.html" target="_blank" rel="noopener">Compose Multiplatform: доступность на iOS, testTag и accessibilityIdentifier</a></li>
+      <li><a href="https://developer.android.com/develop/ui/views/layout/webapps/debug-chrome-devtools" target="_blank" rel="noopener">Android: отладка WebView</a></li>
+      <li><a href="https://webkit.org/blog/13936/enabling-the-inspection-of-web-content-in-apps/" target="_blank" rel="noopener">WebKit: инспекция WKWebView (isInspectable)</a></li>
+    </ul>
+  </footer>
+</div>
+
+<script>
+  document.querySelectorAll("[data-copy]").forEach(function (button) {
+    button.addEventListener("click", function () {
+      var target = document.getElementById(button.dataset.copy);
+      if (!target) return;
+      var reset = function (delay) {
+        setTimeout(function () { button.textContent = "Копировать"; }, delay);
+      };
+      var selectText = function () {
+        var range = document.createRange();
+        range.selectNodeContents(target);
+        var selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        button.textContent = "Выделено, нажмите Ctrl+C";
+        reset(2400);
+      };
+      try {
+        navigator.clipboard.writeText(target.innerText).then(function () {
+          button.textContent = "Скопировано";
+          reset(1600);
+        }, selectText);
+      } catch (error) {
+        selectText();
+      }
+    });
+  });
+
+  (function () {
+    var input = document.getElementById("tag-filter");
+    var empty = document.getElementById("registry-empty");
+    var screens = Array.prototype.slice.call(document.querySelectorAll("[data-screen]"));
+    if (!input) return;
+    input.addEventListener("input", function () {
+      var query = input.value.trim().toLowerCase();
+      var anyVisible = false;
+      screens.forEach(function (screen) {
+        var rows = Array.prototype.slice.call(screen.querySelectorAll("tbody tr"));
+        var visibleRows = 0;
+        rows.forEach(function (row) {
+          var match = !query || row.textContent.toLowerCase().indexOf(query) !== -1;
+          row.hidden = !match;
+          if (match) visibleRows += 1;
+        });
+        screen.hidden = visibleRows === 0;
+        if (visibleRows > 0) anyVisible = true;
+      });
+      empty.hidden = anyVisible;
+    });
+  })();
+</script>
+
+
+
+</body></html>
