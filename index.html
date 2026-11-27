@@ -358,9 +358,9 @@
       <span class="chip ok">Готово: вход, PIN-код, главная, поиск, уведомления, заявка на займ, оплата, договоры, профиль, карты, сервисы, подпись по АСП, документы личности, экран результата, вакансии, новости, персональный менеджер, «О приложении», ИИ-чат</span>
       <span class="chip ok">Теги в сборках 3.0.0.0 с 30 сентября — можно писать тесты</span>
       <span class="chip ok">Теги с пометкой «3.0.1.0» — только в сборках 3.0.1.0</span>
-      <span class="chip warn">Праздничные иконки: основные теги проверены на Android Demo, iOS — ожидается</span>
+      <span class="chip ok">Иконки и тема проверены на Android Demo и iOS Demo</span>
       <span class="chip warn">Часть кнопок меняет настоящие данные — см. «Осторожно»</span>
-      <span class="chip">Обновлено 24 ноября 2026</span>
+      <span class="chip">Обновлено 27 ноября 2026</span>
     </div>
     <nav class="toc" aria-label="Содержание">
       <a href="#find">Как искать</a>
@@ -412,18 +412,18 @@
       </table>
     </div>
     <h3>Пример: праздничные иконки</h3>
-    <p>В сборке с этой функцией после успешного обычного входа по PIN-коду или биометрии кнопка «Включить» в предложении имеет тег <span class="tag">holiday_icon_sheet_enable_button</span>. В профиле чекбокс имеет тег <span class="tag">profile_holiday_icons_checkbox</span>. Оба тега наблюдались на Android Demo через настоящий Firebase; примеры сверены по коду. Проверка этих тегов на iOS ещё ожидается.</p>
+    <p>В профиле откройте карточку «Изменить иконку приложения» по тегу <span class="tag">profile_change_app_icon_button</span>. В шторке найдите чекбокс «Применять праздничные иконки» по тегу <span class="tag">profile_holiday_icons_checkbox</span>. Чтобы проверить системный значок, после переключения сверните приложение на Android. На iOS дождитесь смены в открытом приложении и закройте системное уведомление, если оно появилось.</p>
     <div class="setup">
       <div class="code">
         <button class="copy" type="button" data-copy="holiday-example-android">Копировать</button>
 <pre id="holiday-example-android">// Android, Java / Kotlin
-AppiumBy.id("holiday_icon_sheet_enable_button")
+AppiumBy.id("profile_change_app_icon_button")
 AppiumBy.id("profile_holiday_icons_checkbox")</pre>
       </div>
       <div class="code">
         <button class="copy" type="button" data-copy="holiday-example-ios">Копировать</button>
 <pre id="holiday-example-ios">// iOS, Java / Kotlin
-AppiumBy.accessibilityId("holiday_icon_sheet_enable_button")
+AppiumBy.accessibilityId("profile_change_app_icon_button")
 AppiumBy.accessibilityId("profile_holiday_icons_checkbox")</pre>
       </div>
     </div>
@@ -519,7 +519,7 @@ AppiumBy.accessibilityId("profile_holiday_icons_checkbox")</pre>
   <section id="registry" class="registry">
     <div class="screen-head">
       <h2>Список тегов</h2>
-      <span class="small">Пилот — 28 сентября, займы, оплата, договоры и профиль — 29 сентября, карты, сервисы, подпись по АСП, документы личности, экран результата, вакансии, новости, персональный менеджер, «О приложении» и ИИ-чат — 30 сентября, дополнение карточек займов — 9 октября, главная — 14 октября, регион действия у патента — 3 ноября, подтверждение даты рождения при входе — 13 ноября, праздничные иконки (частичная проверка Android Demo) — 24 ноября 2026</span>
+      <span class="small">Пилот — 28 сентября, займы, оплата, договоры и профиль — 29 сентября, карты, сервисы, подпись по АСП, документы личности, экран результата, вакансии, новости, персональный менеджер, «О приложении» и ИИ-чат — 30 сентября, дополнение карточек займов — 9 октября, главная — 14 октября, регион действия у патента — 3 ноября, подтверждение даты рождения при входе — 13 ноября, настройки иконок и темы — 27 ноября 2026</span>
     </div>
     <div class="registry-tools">
       <label for="tag-filter">Найти элемент или тег</label>
@@ -623,16 +623,9 @@ AppiumBy.accessibilityId("profile_holiday_icons_checkbox")</pre>
             <tr><td>Назад</td><td><span class="tag">top_bar_back_button</span></td><td>при смене кода</td></tr>
             <tr><td>Диалог «Использовать биометрию?»</td><td><span class="tag">access_code_biometric_dialog_title</span> <span class="tag">access_code_biometric_dialog_no_button</span> <span class="tag">access_code_biometric_dialog_yes_button</span></td><td>после создания кода, если есть биометрия</td></tr>
             <tr><td>Диалог «Сбросить код доступа?»</td><td><span class="tag">access_code_forgot_dialog_title</span> <span class="tag">access_code_forgot_dialog_message</span> <span class="tag">access_code_forgot_dialog_no_button</span> <span class="tag">access_code_forgot_dialog_yes_button</span></td><td>после «Забыли код?»</td></tr>
-            <tr><td>Праздничная иконка: прокручиваемое содержимое шторки</td><td><span class="tag">holiday_icon_sheet_list</span></td><td>после успешного обычного входа, до главной; основной показ проверен на Android Demo, iOS ожидается</td></tr>
-            <tr><td>Праздничная иконка: заголовок и объяснение</td><td><span class="tag">holiday_icon_sheet_title</span> <span class="tag">holiday_icon_sheet_message</span></td><td>в открытой шторке предложения</td></tr>
-            <tr><td>Праздничная иконка: стандартное превью и подпись</td><td><span class="tag">holiday_icon_sheet_standard_image</span> <span class="tag">holiday_icon_sheet_standard_text</span></td><td>стандартная иконка текущей сборки; изображение — если удалось прочитать ресурс</td></tr>
-            <tr><td>Праздничная иконка: текущее праздничное превью и подпись</td><td><span class="tag">holiday_icon_sheet_holiday_image</span> <span class="tag">holiday_icon_sheet_holiday_text</span></td><td>если в текущем Firebase config есть праздник; изображение — если удалось прочитать ресурс</td></tr>
-            <tr><td>Праздничная иконка: «Праздника сейчас нет»</td><td><span class="tag">holiday_icon_sheet_empty_text</span></td><td>если праздник закончился, пока шторка открыта; праздничное превью исчезает</td></tr>
-            <tr><td>Праздничная иконка: «Включить», «Не сейчас»</td><td><span class="tag">holiday_icon_sheet_enable_button</span> <span class="tag">holiday_icon_sheet_dismiss_button</span></td><td>«Не сейчас», свайп, Back и нажатие снаружи сохраняют отказ; включить позже можно в профиле</td></tr>
           </tbody>
         </table>
       </div>
-      <p class="note">Праздничные иконки: все теги сверены по коду 24 ноября 2026. На Android Demo через настоящий Firebase наблюдались все теги шторки из таблицы, кроме holiday_icon_sheet_empty_text (9 тегов). Это пустое состояние на Android и все теги на iOS ещё ожидают проверки; наличие функции в опубликованных сборках не подтверждено. Предложение доступно один раз после успешного обычного SIGN_IN по PIN-коду или биометрии, если уже готов праздник, ответа ещё нет и платформа поддерживает смену. Создание, смена и сброс PIN исключены. Сеть ради входа не ждём: поздний config — на следующий подходящий вход. Обязательные окна имеют приоритет; системная биометрия должна закрыться до показа. Картинка следует текущему config.</p>
     </div>
 
     <div class="screen" data-screen>
@@ -942,21 +935,22 @@ AppiumBy.accessibilityId("profile_holiday_icons_checkbox")</pre>
             <tr><td>Выйти</td><td><span class="tag">profile_logout_button</span></td><td>открывает диалог выхода</td></tr>
             <tr><td>Диалог выхода: заголовок, текст, «Выйти», «Отмена»</td><td><span class="tag">profile_logout_dialog_title</span> <span class="tag">profile_logout_dialog_message</span> <span class="tag">profile_logout_dialog_confirm_button</span> <span class="tag">profile_logout_dialog_dismiss_button</span></td><td>после «Выйти» понадобится снова войти</td></tr>
             <tr><td>Подсказка о биометрии: заголовок, текст, «Понятно»</td><td><span class="tag">profile_biometric_help_dialog_title</span> <span class="tag">profile_biometric_help_dialog_message</span> <span class="tag">profile_biometric_help_dialog_dismiss_button</span></td><td>после кнопки подсказки</td></tr>
-            <tr><td>Выбор темы: заголовок</td><td><span class="tag">profile_theme_dialog_title</span></td><td>после «Изменить тему приложения»</td></tr>
+            <tr><td>Выбор темы: шторка и заголовок</td><td><span class="tag">profile_theme_sheet_list</span> <span class="tag">profile_theme_dialog_title</span></td><td>после «Изменить тему приложения»; выбранная тема сохраняется при перезапуске</td></tr>
             <tr><td>Выбор темы: светлая, тёмная, как в системе</td><td><span class="tag">profile_theme_light_radio</span> <span class="tag">profile_theme_dark_radio</span> <span class="tag">profile_theme_system_radio</span></td><td>подпись варианта — тег с <code>_text</code> на конце, например <span class="tag">profile_theme_dark_radio_text</span></td></tr>
-            <tr><td>Праздничные иконки: чекбокс и подпись</td><td><span class="tag">profile_holiday_icons_checkbox</span> <span class="tag">profile_holiday_icons_checkbox_text</span></td><td>в настройках профиля; подпись тоже переключает чекбокс. Основное состояние проверено на Android Demo, iOS ожидается</td></tr>
-            <tr><td>Праздничные иконки: стандартное превью и подпись</td><td><span class="tag">profile_holiday_standard_image</span> <span class="tag">profile_holiday_standard_text</span></td><td>если чекбокс включён; стандартная иконка текущей сборки; изображение — если ресурс доступен</td></tr>
-            <tr><td>Праздничные иконки: текущий праздник и подпись</td><td><span class="tag">profile_holiday_current_image</span> <span class="tag">profile_holiday_current_text</span></td><td>если чекбокс включён и в текущем config есть праздник; изображение — если ресурс доступен</td></tr>
-            <tr><td>Праздничные иконки: праздника нет</td><td><span class="tag">profile_holiday_empty_text</span></td><td>если чекбокс включён, праздника нет и смена поддерживается</td></tr>
-            <tr><td>Праздничные иконки: фактическое состояние ОС</td><td><span class="tag">profile_holiday_actual_status_text</span></td><td>если чекбокс включён, смена ожидается или произошла ошибка; состояние может быть неизвестно</td></tr>
-            <tr><td>Праздничные иконки: фактическое превью и подпись</td><td><span class="tag">profile_holiday_actual_image</span> <span class="tag">profile_holiday_actual_text</span></td><td>при ожидании или ошибке, если фактическая иконка известна; изображение — если ресурс доступен</td></tr>
-            <tr><td>Праздничные иконки: ожидание смены</td><td><span class="tag">profile_holiday_pending_text</span></td><td>пока смена отложена, если нет ошибки; на Android — до безопасного ухода приложения в фон</td></tr>
-            <tr><td>Праздничные иконки: смена недоступна</td><td><span class="tag">profile_holiday_unsupported_text</span></td><td>если чекбокс включён, config готов, но API или нужная упакованная иконка недоступны; выбор сохранён</td></tr>
-            <tr><td>Праздничные иконки: ошибка и повтор</td><td><span class="tag">profile_holiday_error_text</span> <span class="tag">profile_holiday_retry_button</span></td><td>при ошибке; вместо общего текста ошибки может быть сообщение о недоступности, кнопка «Повторить» остаётся</td></tr>
+            <tr><td>Изменить иконку приложения</td><td><span class="tag">profile_change_app_icon_button</span></td><td>карточка со стрелкой сразу после темы; открывает шторку, не переключает согласие</td></tr>
+            <tr><td>Праздничные иконки: шторка настройки и заголовок</td><td><span class="tag">profile_holiday_icons_sheet_list</span> <span class="tag">profile_holiday_icons_sheet_title</span></td><td>после «Изменить иконку приложения»; закрытие без изменения checkbox сохраняет согласие</td></tr>
+            <tr><td>Праздничные иконки: переключаемая строка в шторке</td><td><span class="tag">profile_holiday_icons_header_checkbox</span></td><td>внутри шторки настройки; нажатие на свободное место строки переключает настройку один раз. У чекбокса и подписи есть свои теги</td></tr>
+            <tr><td>Праздничные иконки: чекбокс и подпись</td><td><span class="tag">profile_holiday_icons_checkbox</span> <span class="tag">profile_holiday_icons_checkbox_text</span></td><td>«Применять праздничные иконки» внутри шторки; чекбокс справа. Включение выбирает иконку из Remote Config, выключение возвращает стандартную</td></tr>
+            <tr><td>Праздничные иконки: малая фактическая иконка</td><td><span class="tag">profile_holiday_icon_image</span></td><td>24dp слева в карточке «Изменить иконку приложения», вне шторки; фактическая иконка ОС текущей сборки, декоративная для озвучки. Тег есть, если состояние известно и ресурс прочитан</td></tr>
+            <tr><td>Праздничные иконки: стандартное превью и подпись</td><td><span class="tag">profile_holiday_standard_image</span> <span class="tag">profile_holiday_standard_text</span></td><td>в открытой шторке при любом положении чекбокса; превью серое, когда настройка включена и в Remote Config есть праздничная иконка. Тег изображения доступен при наличии ресурса</td></tr>
+            <tr><td>Праздничные иконки: текущий праздник и подпись</td><td><span class="tag">profile_holiday_current_image</span> <span class="tag">profile_holiday_current_text</span></td><td>в открытой шторке при праздничной иконке в Remote Config; превью цветное при включённой настройке и серое при выключенной. Тег изображения доступен при наличии ресурса</td></tr>
+            <tr><td>Праздничные иконки: праздника нет</td><td><span class="tag">profile_holiday_empty_text</span></td><td>в открытой шторке при отсутствии праздника, независимо от checkbox; стандартное превью остаётся цветным</td></tr>
+            <tr><td>Праздничные иконки: смена недоступна</td><td><span class="tag">profile_holiday_unsupported_text</span></td><td>настройка включена, конфигурация готова, а система или ресурсы сборки не позволяют применить выбранную иконку</td></tr>
+            <tr><td>Праздничные иконки: ошибка и повтор</td><td><span class="tag">profile_holiday_error_text</span> <span class="tag">profile_holiday_retry_button</span></td><td>при ошибке чтения настройки, сохранения выбора или применения значка. При недоступности иконки показывается отдельное пояснение. «Повторить» запускает операцию, завершившуюся ошибкой</td></tr>
           </tbody>
         </table>
       </div>
-      <p class="note">Праздничные иконки: все теги сверены по коду 24 ноября 2026. На Android Demo через настоящий Firebase наблюдались 7 основных тегов: чекбокс с подписью, стандартное и текущее праздничное превью с подписями, текст фактического состояния ОС. Пустое состояние, ожидание смены, ошибка, повтор, недоступность и фактическое превью при ожидании или ошибке на Android ещё не проверены; все теги на iOS также ожидают проверки. Состояние чекбокса — сохранённое согласие; оно может отличаться от фактической иконки ОС во время ожидания или ошибки. Превью текущего праздника берётся из актуального config. Отказ от первого предложения не мешает включить функцию здесь позже.</p>
+      <p class="note">На Android Demo и iOS Demo в деревьях Mobile MCP найдены карточки темы и иконки, обе шторки, варианты темы, чекбокс с подписью и оба превью. Проверены оба направления смены иконки и сохранение тёмной темы после перезапуска. Условия появления тегов для отсутствия праздника, недоступности и ошибок сверены по коду; адресный повтор проверен unit-тестами.</p>
     </div>
 
     <div class="screen" data-screen>
@@ -1439,7 +1433,7 @@ AppiumBy.accessibilityId("profile_holiday_icons_checkbox")</pre>
         <div class="kind"><span class="chip">Системное окно</span></div>
         <div class="body">
           <h3>iOS: подтверждение смены иконки</h3>
-          <p>Системное уведомление iOS после смены иконки не получает наших тегов. Теги <code>holiday_icon_sheet_…</code> относятся к шторке приложения перед главной, а не к этому окну. Системное окно и его появление на устройстве пока не проверены.</p>
+          <p>Системное уведомление iOS после смены иконки не получает наших тегов. На iOS Demo уведомление с новым значком появилось при включении и при выключении настройки.</p>
         </div>
       </div>
       <div class="gap-item">
@@ -1560,16 +1554,17 @@ AppiumBy.accessibilityId("profile_holiday_icons_checkbox")</pre>
       </li>
       <li>
         <div class="body">
-          <div class="title"><h3>Дополнение: праздничные иконки</h3><span class="chip warn">Android Demo: частично</span></div>
-          <p>24 ноября 2026 в реестр добавлены теги предложения после обычного входа по PIN-коду или биометрии и настройки в профиле. Найти их можно запросом <code>holiday</code> в <a href="#registry">списке тегов</a>; примеры локаторов — в <a href="#find">«Как искать»</a>.</p>
-          <p>Теги и производные <code>_image</code>, <code>_text</code> сверены с текущей реализацией функции. На Android Demo через настоящий Firebase наблюдались 9 основных тегов шторки и 7 основных тегов настройки в профиле. Условные состояния (пустое состояние, ожидание, ошибка, повтор, недоступность и фактическое превью при ожидании или ошибке) на Android и все теги на iOS ещё ожидают проверки. Дата включения в опубликованные сборки пока не подтверждена.</p>
+          <div class="title"><h3>Дополнение: праздничные иконки и выбор темы</h3><span class="chip ok">Проверено на Android Demo и iOS Demo</span></div>
+          <p>На чистой установке Android Demo после входа открывается главный экран без шторки-предложения. При отсутствии локального выбора автосмена разрешена вне модерации текущего магазина. Явный выбор имеет приоритет над модерацией: включение выбирает иконку из Remote Config, выключение возвращает стандартную.</p>
+          <p>27 ноября 2026 на Pixel 7 с Android 16 оба переключения подтвердили после сворачивания. Если переключить чекбокс несколько раз, применяется последнее положение. На iPhone 17 Pro с iOS 26.5 иконка менялась в открытом приложении, и iOS показывала системное уведомление с новым значком. На обеих платформах тёмная тема сохранилась после перезапуска.</p>
+          <p>В <a href="#registry">списке тегов</a> ищите настройки иконок по <code>profile_holiday</code> или <code>profile_change_app_icon_button</code>, а настройки темы по <code>profile_theme</code>. Для этих локаторов нужна Demo-сборка с изменениями праздничных иконок и шторки темы.</p>
         </div>
       </li>
     </ol>
   </section>
 
   <footer>
-    <div>Обновлено 24 ноября 2026. Источники:</div>
+    <div>Обновлено 27 ноября 2026. Источники:</div>
     <ul>
       <li><a href="https://github.com/appium/appium-uiautomator2-driver" target="_blank" rel="noopener">Драйвер UiAutomator2: disableIdLocatorAutocompletion, mapTestTagToResourceId</a></li>
       <li><a href="https://kotlinlang.org/docs/multiplatform/compose-ios-accessibility.html" target="_blank" rel="noopener">Compose Multiplatform: доступность на iOS, testTag и accessibilityIdentifier</a></li>
